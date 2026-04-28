@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Plus,
   MessageCircle,
@@ -143,6 +145,7 @@ const mockTasks = [
   { id: '9', title: '周末敬老院活动行前培训', deadline: '本周五晚 19:00', sourceOrg: '志愿者服务', status: 'pending', priority: 'high', formId: 'training' },
 ];
 export default function App() {
+  const router = useRouter();
   const [view, setView] = useState<"home" | "class">("home");
   const [activeTab, setActiveTab] = useState<"assistant" | "vault">(
     "assistant",
@@ -377,7 +380,7 @@ export default function App() {
               <div className="flex justify-center items-center space-x-12 mt-1 relative w-full">
                 <button
                   onClick={() => setActiveSchoolTab("orgs")}
-                  className={`text-[15px] pb-2 transition-colors relative font-medium ${
+                  className={`text-[15px] pb-2 transition-colors relative font-medium cursor-pointer ${
                     activeSchoolTab === "orgs"
                       ? "text-blue-500 font-bold"
                       : "text-zinc-500"
@@ -390,7 +393,7 @@ export default function App() {
                 </button>
                 <button
                   onClick={() => setActiveSchoolTab("feed")}
-                  className={`text-[15px] pb-2 transition-colors relative font-medium ${
+                  className={`text-[15px] pb-2 transition-colors relative font-medium cursor-pointer ${
                     activeSchoolTab === "feed"
                       ? "text-blue-500 font-bold"
                       : "text-zinc-500"
@@ -435,12 +438,19 @@ export default function App() {
                   </div>
 
                   {orgList.map((org) => (
-                    <div
+                    <Link
+                      href={org.name === "我的班级" ? "/student" : "#"}
                       key={org.id}
-                      onClick={() => {
+                      onClick={(e) => {
+                        if (org.name === "我的班级") {
+                          // Follow link to /student
+                          return;
+                        }
+                        e.preventDefault();
                         setCurrentOrgName(org.name);
                         setCurrentOrgRole(org.role as "admin" | "member");
                         setView("class");
+                        router.push("#class");
                       }}
                       className="flex items-center bg-white p-3.5 rounded-[20px] active:scale-[0.98] transition-all cursor-pointer select-none shadow-sm relative"
                     >
@@ -500,7 +510,7 @@ export default function App() {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
 
@@ -877,19 +887,21 @@ export default function App() {
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter") handleSend();
+                            if (e.key === "Enter" && !isAiThinking) handleSend();
                           }}
                           placeholder={
                             currentOrgRole === "member"
                               ? "和智能助理聊聊..."
                               : "下发指令或通知..."
                           }
-                          className="flex-1 bg-transparent text-[15px] outline-none text-zinc-900 placeholder-zinc-400 font-medium"
+                          disabled={isAiThinking}
+                          className="flex-1 bg-transparent text-[15px] outline-none text-zinc-900 placeholder-zinc-400 font-medium disabled:opacity-50"
                         />
                       </div>
                       <button
                         onClick={handleSend}
-                        className="w-[44px] h-[44px] bg-blue-500 rounded-full flex items-center justify-center text-white shrink-0 active:bg-blue-600 active:scale-95 transition-all shadow-sm"
+                        disabled={isAiThinking || !chatInput.trim()}
+                        className="w-[44px] h-[44px] bg-blue-500 rounded-full flex items-center justify-center text-white shrink-0 active:bg-blue-600 active:scale-95 transition-all shadow-sm disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed"
                       >
                         <Send
                           size={18}

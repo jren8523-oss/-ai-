@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import {
   Plus,
@@ -32,7 +33,7 @@ import {
   Heart,
 } from "lucide-react";
 
-const QUICK_ACTIONS = [
+const QUICK_ACTIONS: { id: string; icon: string; label: string; prompt: string; isCustom?: boolean }[] = [
   {
     id: "sign",
     icon: "📍",
@@ -232,7 +233,7 @@ export default function App() {
     }
   }, [view, currentOrgName, currentOrgRole]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const text = chatInput.trim();
     if (!text) return;
 
@@ -243,11 +244,18 @@ export default function App() {
     setChatInput("");
     setIsAiThinking(true);
 
-    setTimeout(() => {
-      setIsAiThinking(false);
-      const context =
-        orgContextMap[currentOrgName] || orgContextMap["我的班级"];
-      const reply = context.replyLogic(text);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          contextTitle: currentOrgName,
+        }),
+      });
+
+      const data = await response.json();
+      const reply = response.ok ? data.reply : "抱歉，服务器出现了点问题。";
 
       const newMsg: {
         id: string;
@@ -262,7 +270,18 @@ export default function App() {
       };
 
       setMessages((prev) => [...prev, newMsg]);
-    }, 1200);
+    } catch (error) {
+      console.error(error);
+      const errorMsg: typeof messages[0] = {
+        id: (Date.now() + 1).toString(),
+        role: "ai",
+        type: "text",
+        content: "网络连接失败，请稍后重试。",
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
+      setIsAiThinking(false);
+    }
   };
 
   // 自定义指令状态

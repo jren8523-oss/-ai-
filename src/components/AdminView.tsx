@@ -23,7 +23,7 @@ function CallAITab() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isThinking]);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -32,22 +32,40 @@ function CallAITab() {
     setInput('');
     setIsThinking(true);
 
-    setTimeout(() => {
-      setIsThinking(false);
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: query,
+          contextTitle: '我的班级',
+        }),
+      });
+
+      const data = await response.json();
+      const reply = response.ok ? data.reply : '抱歉，AI 服务器暂时出现了点问题，请稍后再试。';
+
       setMessages(prev => [
-        ...prev, 
-        { 
-          id: (Date.now() + 1).toString(), 
-          type: 'task-card', 
-          data: {
-            title: query.includes("班费") ? "收取班费" : "新任务下发",
-            labels: ["#收缴", "#紧急"],
-            amount: query.includes("50") ? "50" : "",
-            deadline: ""
-          }
-        }
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          type: 'bot',
+          content: reply,
+        },
       ]);
-    }, 1500);
+    } catch (error) {
+      console.error('Chat API error:', error);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          type: 'bot',
+          content: '网络连接失败，请检查网络后重试。',
+        },
+      ]);
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   return (

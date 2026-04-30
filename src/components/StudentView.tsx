@@ -42,7 +42,7 @@ function AssistantTab() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const handleSend = (e?: React.FormEvent) => {
+  const handleSend = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!input.trim()) return;
 
@@ -51,19 +51,34 @@ function AssistantTab() {
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      setIsTyping(false);
-      let reply = "我已经收到你的反馈啦。如果是请假等行政事务，已自动为你归档。";
-      if (query.includes("找下") || query.includes("课件")) {
-        reply = "帮你找到了一份相关的资料：\n[文件] 民法学_第三章_物权法总结.pdf\n存储于：公共知识库 / 必修课程";
-      }
-      
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: query,
+          contextTitle: '我的班级',
+        }),
+      });
+
+      const data = await response.json();
+      const reply = response.ok ? data.reply : '抱歉，AI 服务器暂时出现了点问题，请稍后再试。';
+
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         type: 'bot',
         content: <div className="whitespace-pre-wrap">{reply}</div>
       }]);
-    }, 1500);
+    } catch (error) {
+      console.error('Chat API error:', error);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        type: 'bot',
+        content: <div className="whitespace-pre-wrap text-red-500">网络连接失败，请检查网络后重试。</div>
+      }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const faqs = ["帮我找下那个民法课件", "本周青年大学习截止时间？", "请假流程是什么？"];

@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────
+// Legacy replyLogic — kept as fallback for environments
+// without DEEPSEEK_API_KEY. Primary interaction card
+// generation is now AI-driven via ui-request protocol.
+// See: src/lib/uiRequestProtocol.ts
+// ─────────────────────────────────────────────────────
+
 export const QUICK_ACTIONS: { id: string; icon: string; label: string; prompt: string; isCustom?: boolean }[] = [
   {
     id: "sign",
@@ -15,7 +22,7 @@ export const QUICK_ACTIONS: { id: string; icon: string; label: string; prompt: s
     id: "books",
     icon: "📚",
     label: "征订班级教材",
-    prompt: "开启新一轮的班级教材征订，专业课包括法理学、民法典等。",
+    prompt: "开启新一轮的班级教材征订，专业课教材由系统自动汇总，各位同学核对即可。",
   },
   {
     id: "homework",
@@ -30,18 +37,23 @@ export const orgContextMap: Record<
   {
     aiTitle: string;
     initialMessage: string;
-    replyLogic: (text: string) => string;
+    /** @deprecated Legacy fallback — primary card generation is now AI-driven via ui-request protocol */
+    replyLogic: (text: string) => { type: string; content: string; payload?: any } | string;
   }
 > = {
   我的班级: {
     aiTitle: "AI 班级管家 (已接入教务数据)",
     initialMessage:
-      "辅导员魏老师最新通知：本周《民法典》期末复习资料已由我自动上传至资产仓，请提醒同学们查阅。目前还有3人未提交毕业论文定稿。",
+      "辅导员魏老师最新通知：本周课程复习资料已由我自动上传至资产仓，请提醒同学们查阅。目前还有3人未提交课程作业定稿。",
+    /** @deprecated Legacy fallback — used only when DEEPSEEK_API_KEY is not configured */
     replyLogic: (text: string) => {
+      if (text.includes("发布签到") || text.includes("我要签到")) {
+        return { type: "checkin-config", content: "" };
+      }
       if (text.includes("整理"))
         return "正在为您整理班级周报... 已提取本周考勤、作业提交情况及校园活动参与数据，预计生成需 3 秒。";
       if (text.includes("催促"))
-        return "已为您标记未交论文定稿的 3 名同学。是否需要我通过系统向他们发送一键催办提醒？";
+        return "已为您标记未交课程作业的 3 名同学。是否需要我通过系统向他们发送一键催办提醒？";
       return "指令明确。已为您记录，我将继续跟进相关行政执行情况。";
     },
   },
@@ -49,22 +61,24 @@ export const orgContextMap: Record<
     aiTitle: "AI 校园百事通",
     initialMessage:
       "【校园热榜速递】本周校园热帖摘要已生成。提示：迎新晚会的策划方案正在内部公示中，请各位干事留意截止时间。",
+    /** @deprecated Legacy fallback */
     replyLogic: (text: string) => {
       return "为您查询到以下信息：迎新晚会的大礼堂场地将于下周三下午14:00-18:00占用。如果您需要了解更多关于场地申请的规章，我可以为您详细解答。";
     },
   },
   志愿者服务: {
-    aiTitle: "AI 志愿监测助手",
+    aiTitle: "AI 机会雷达",
     initialMessage:
-      "已为您接入 5 个志愿者招募群，正在实时扫描中... 本日监测到 3 个法学相关志愿项目，其中【杭州中院法律咨询助手】专业匹配度最高（95%），名额仅剩 2 个。您本学期累计志愿时长为 18 小时，距评优还差 2 小时。",
+      "已为您接入 5 个校级/院级活动群，正在实时扫描中... 本日监测到 3 个高含金量机会：①【全国大学生数学建模竞赛】匹配度最高（省级奖项），报名倒计时 2 天；②【社区支教志愿者】名额 8 个（可加综测分）；③【校运会开幕式表演志愿者】名额 15 个（通识学分）。建议优先锁定第①项。",
+    /** @deprecated Legacy fallback */
     replyLogic: (text: string) => {
-      if (text.includes("法学") || text.includes("法律") || text.includes("专业相关") || text.includes("匹配")) {
-        return "已为您实时扫描 5 个相关群组。检测到【杭州中院法律咨询助手】名额剩余 2 个（专业匹配度 95%），已为您预填报名表，点击即可发送。";
+      if (text.includes("竞赛") || text.includes("加分") || text.includes("综测") || text.includes("数学建模")) {
+        return "已为您实时扫描 5 个相关群组。检测到【全国大学生数学建模竞赛】报名倒计时 2 天（省级奖项，综测加分 3 分），已为您预填报名表，点击即可发送。";
       }
       if (text.includes("志愿") || text.includes("活动") || text.includes("报名")) {
-        return "为您聚合 5 个群组最新招募信息：①【杭州中院法律咨询助手】名额 2 个（法学匹配 95%）；②【社区普法宣传员】名额 5 个（法学匹配 82%）；③【周末敬老院活动】名额 2 个（通用志愿）。建议优先抢报第①项，点击即可预填报名。";
+        return "为您聚合 5 个群组最新招募信息：①【全国大学生数学建模竞赛】倒计时 2 天（省级·加分 3 分）；②【社区支教志愿者】名额 8 个（校级·加分 1.5 分）；③【校运会开幕式表演志愿者】名额 15 个（通识学分）。建议优先抢报第①项，点击即可预填报名。";
       }
-      return "正在为您持续监测 5 个群组动态。如需筛选特定类型志愿（如法学/支教/环保），请直接告诉我您的偏好，AI 将为您精准匹配。";
+      return "正在为您持续监测 5 个群组动态。如需筛选特定类型机会（如竞赛/支教/实习/社会实践），请直接告诉我您的偏好，AI 将为您精准匹配。";
     },
   },
 };
@@ -78,7 +92,7 @@ export const mockTasks: Array<{
   priority: "high" | "normal";
   formId?: string;
 }> = [
-  { id: '1', title: '期中论文定稿及查重报告', deadline: '今天 23:59 截止', sourceOrg: '我的班级', status: 'pending', priority: 'high', formId: 'thesis' },
+  { id: '1', title: '课程作业提交及查重报告', deadline: '今天 23:59 截止', sourceOrg: '我的班级', status: 'pending', priority: 'high', formId: 'thesis' },
   { id: '2', title: '综测加分证明材料确认', deadline: '明天 12:00 截止', sourceOrg: '我的班级', status: 'pending', priority: 'normal', formId: 'score' },
   { id: '3', title: '教材征订', sourceOrg: '我的班级', status: 'pending', priority: 'normal', formId: 'textbook' },
   { id: '4', title: '青年大学习第12期截图收集', deadline: '昨天 16:30 智能归档', sourceOrg: '我的班级', status: 'completed', priority: 'normal' },
@@ -97,88 +111,135 @@ export interface AdminUserProfile {
   aiAccessPoints: { title: string; description: string }[];
 }
 
-export const ADMIN_USER_PROFILE: AdminUserProfile = {
-  roleName: "班级行政主理人（以生活委员/班长为原型）",
-  managementScale: "法学256班全员 31 人",
+export const CLASS_ADMIN_PROFILE: AdminUserProfile = {
+  roleName: "班级行政主理人（劳模班委）",
+  managementScale: "行政班级全员",
   coreTasks: [
     {
       title: "整理信息",
-      description: "将教务处 2000 字的公文转化为 3 条核心待办。",
+      description: "把教务处发的一长串公文拆成 3 条同学看得懂的执行指令。",
     },
     {
       title: "收费确权",
-      description: "核对 31 份教材订购名单与转账截图，确保不漏不错。",
+      description: "逐一核对全班同学的转账截图和名单，确保不重不漏。",
     },
     {
       title: "考勤管理",
-      description: "发布签到任务，并核实地理围栏与二维码。",
+      description: "发布签到任务，核实每个人的定位和到勤情况。",
     },
   ],
   corePainPoints: [
     {
-      title: "算力浪费",
-      description: "每天花费 2 小时进行人工对账，机械重复。",
+      title: "重复劳动",
+      description: "每天花 2 小时人肉对账，截图翻到手软，纯纯体力活。",
     },
     {
-      title: "心理压力",
-      description: `在班群"刷屏式"催缴容易引发同学反感，耗损社交资本。`,
+      title: "社交压力",
+      description: "在班群一遍遍催截图催缴费，刷屏怕被嫌烦，不刷又收不齐。",
     },
   ],
   aiAccessPoints: [
     {
-      title: "自动审计",
-      description: `AI 自动比对确权，将"4小时接龙"缩短为"3分钟一键归档"。`,
+      title: "截图自动识别",
+      description: "AI 自动读取同学们发的转账截图，比对名单一键确权，人肉 4 小时的活缩到 3 分钟。",
     },
     {
-      title: "拟态代催",
-      description: `利用"摸鱼同桌"人格进行非侵入式提醒，降低行政对抗感。`,
+      title: "非侵入式代催",
+      description: "不用你在群里刷屏，「摸鱼同桌」人格代替你私聊提醒，同学不反感，你也不用当恶人。",
     },
   ],
 };
 
-export const VOLUNTEER_SERVICE_PROFILE: AdminUserProfile = {
-  roleName: "志愿者服务参与者（以法学专业学生为原型）",
-  managementScale: "同时监控 5 个志愿者招募群",
+export const MINIMALIST_STUDENT_PROFILE: AdminUserProfile = {
+  roleName: "极简履行者（屏蔽达人）",
+  managementScale: "同时关注 3 个综合信息频道",
   coreTasks: [
     {
-      title: "跨群监测",
-      description: "实时扫描 5 个群组的招募信息，避免遗漏任何优质志愿机会。",
+      title: "信息过滤",
+      description: "从学生会群、年级大群的几百条消息中，捞出真正跟自己有关的通知。",
     },
     {
-      title: "快速报名",
-      description: "在名额被抢光前完成报名表填写与提交。",
+      title: "任务识别",
+      description: "快速分辨「需要我填的表」「需要我缴的费」「需要我确认的截止时间」。",
     },
     {
-      title: "工时追踪",
-      description: "记录志愿时长，确保满足评优门槛（每学期 ≥20 小时）。",
+      title: "极速履行",
+      description: "在截止时间之前完成填报、缴费、确认，不留尾巴。",
     },
   ],
   corePainPoints: [
     {
-      title: "多群焦虑",
-      description: "为抢到高质量志愿名额，需同时加入 5 个群组，信息碎片化严重，生怕错过任何一条招募通知。",
+      title: "群聊疲劳",
+      description: "打开微信就是 99+，翻半天才找到那条通知，中间夹着几百条「收到」「好的」和表情包。",
     },
     {
-      title: "优质机会转瞬即逝",
-      description: "与法学专业高度匹配的志愿（如法院咨询、法律援助）名额通常在 3 分钟内被抢光，手动刷新完全跟不上。",
+      title: "漏看焦虑",
+      description: "每次群消息一多就下意识划过，等回过神来发现截止时间已经过了，只能尴尬私聊班长。",
     },
     {
-      title: "抢单心理压力",
-      description: "面对名额稀缺僧多粥少的局面，反复刷新群聊消耗大量精力，严重影响正常学习节奏。",
+      title: "社交负担",
+      description: "不想整天盯着群聊，但又怕错过重要事情，被迫成为「群奴」。",
     },
   ],
   aiAccessPoints: [
     {
-      title: "跨群信息聚合",
-      description: "AI 自动监听 5 个群组，聚合所有招募信息并按专业匹配度排序，只推送高质量名额。",
+      title: "噪音过滤",
+      description: "AI 自动剔除闲聊、表情包、「收到」刷屏，只把真正需要你处理的任务以卡片形式置顶。",
     },
     {
-      title: "智能预填与秒抢",
-      description: "检测到高匹配度志愿时自动预填报名表，用户只需一键确认发送。",
+      title: "免进群秒完成",
+      description: "收到任务卡片后直接在卡片里操作——填表、缴费、确认，不用点进 99+ 的群聊翻找上下文。",
+    },
+    {
+      title: "智能提醒",
+      description: "快到截止时间还没处理的任务，AI 会悄悄提醒你，不@所有人、不社死、刚刚好。",
+    },
+  ],
+};
+
+export const OPPORTUNITY_HUNTER_PROFILE: AdminUserProfile = {
+  roleName: "机会猎人（抢单射手）",
+  managementScale: "同时盯着 5 个竞赛/志愿/活动招募群",
+  coreTasks: [
+    {
+      title: "跨群监测",
+      description: "实时扫描多个校级/院级群的招募信息，大创、竞赛、志愿、实习一条都不漏。",
+    },
+    {
+      title: "秒级响应",
+      description: "看到高含金量机会的第一时间打开报名链接，跟全校同学拼手速。",
+    },
+    {
+      title: "材料速填",
+      description: "学号、班级、手机号、个人简介——每次报名都要重新敲一遍，烦得要死但不敢出错。",
+    },
+  ],
+  corePainPoints: [
+    {
+      title: "信息碎片化",
+      description: "好机会散落在几十个群公告、公众号推文、辅导员朋友圈里，根本盯不过来。",
+    },
+    {
+      title: "手慢无",
+      description: "大创队友招募、数学建模组队、支教名额——发出来 3 分钟就满了，全看运气和网速。",
+    },
+    {
+      title: "填表地狱",
+      description: "每次抢名额都要重新填一遍表单：学号、班级、手机号、个人陈述……等填完名额早没了。",
+    },
+  ],
+  aiAccessPoints: [
+    {
+      title: "跨频道实时聚合",
+      description: "AI 24 小时监听所有公开频道，把散落的机会按「加分」「社会实践」「省奖」等关键词聚合成一个信息流。",
+    },
+    {
+      title: "自动预填秒抢",
+      description: "检测到匹配的机会时，AI 自动把你的学号、班级、手机号预填入报名表，你只需点一下确认。",
     },
     {
       title: "自然语言检索",
-      description: `用户可用自然语言提问（如"有没有法学相关的志愿"），AI 从多群中精准筛选并推荐。`,
+      description: "开口就问：「最近有没有能加综测分的竞赛？」——AI 直接帮你从几个群的消息里精准筛出来。",
     },
   ],
 };

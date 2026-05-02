@@ -164,11 +164,12 @@ export function HomeView({
               <Link
                 href={org.name === "我的班级" ? "/student" : "#"}
                 key={org.id}
-                onClick={(e) => {
-                  if (org.name === "我的班级") {
-                    // Follow link to /student
-                    return;
-                  }
+                  onClick={(e) => {
+                   if (org.name === "我的班级") {
+                     // Follow link to /student
+                     setCurrentOrgRole("admin");
+                     return;
+                   }
                   e.preventDefault();
                   setCurrentOrgName(org.name);
                   setCurrentOrgRole(org.role as OrgRole);

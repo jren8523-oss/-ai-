@@ -10,6 +10,7 @@ import VaultView from "@/src/components/VaultView";
 import ChatTimeline from "@/src/components/ChatTimeline";
 import PosterShareModal from "@/src/components/PosterShareModal";
 import { QUICK_ACTIONS, orgContextMap, mockTasks } from "@/src/lib/mockData";
+import type { UIRequestPayload } from "@/src/lib/uiRequestProtocol";
 
 export default function App() {
   const [view, setView] = useState<"home" | "class">("home");
@@ -61,8 +62,9 @@ export default function App() {
     {
       id: string;
       role: "user" | "ai";
-      type: "text" | "books" | "checkin";
+      type: "text" | "books" | "checkin" | "checkin-config" | "ui-card";
       content?: string;
+      uiRequest?: UIRequestPayload;
     }[]
   >([]);
   const [isAiThinking, setIsAiThinking] = useState(false);
@@ -111,17 +113,20 @@ export default function App() {
 
       const data = await response.json();
       const reply = response.ok ? data.reply : "抱歉，服务器出现了点问题。";
+      const msgType = (response.ok && data.type) ? data.type : "text";
 
       const newMsg: {
         id: string;
         role: "ai";
-        type: "text" | "books" | "checkin";
+        type: "text" | "books" | "checkin" | "checkin-config" | "ui-card";
         content?: string;
+        uiRequest?: UIRequestPayload;
       } = {
         id: (Date.now() + 1).toString(),
         role: "ai",
-        type: "text",
-        content: reply,
+        type: msgType as typeof newMsg.type,
+        content: reply as string,
+        ...(response.ok && data.uiRequest ? { uiRequest: data.uiRequest as UIRequestPayload } : {}),
       };
 
       setMessages((prev) => [...prev, newMsg]);
@@ -234,6 +239,10 @@ export default function App() {
                     currentOrgRole={currentOrgRole}
                     messagesEndRef={messagesEndRef}
                     orgContextMap={orgContextMap}
+                    onSendMessage={(text) => {
+                      setChatInput(text);
+                      setTimeout(() => handleSend(), 0);
+                    }}
                   />
                   <ChatInputBar
                     currentOrgRole={currentOrgRole}

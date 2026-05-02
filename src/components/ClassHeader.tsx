@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ChevronLeft, MoreHorizontal } from "lucide-react";
+import { ChevronLeft, MoreHorizontal, Shield } from "lucide-react";
 
 interface ClassHeaderProps {
   currentOrgName: string;
@@ -27,8 +27,14 @@ export default function ClassHeader({
         >
           <ChevronLeft size={28} strokeWidth={2.5} />
         </button>
-        <div className="text-[18px] font-bold text-black tracking-wide w-full text-center pointer-events-none truncate px-10">
+        <div className="text-[18px] font-bold text-black tracking-wide w-full text-center pointer-events-none truncate px-10 flex items-center justify-center gap-1.5">
           {currentOrgName}
+          {currentOrgRole === "admin" && (
+            <span className="inline-flex items-center gap-0.5 bg-blue-50 text-blue-600 rounded-full px-2 py-0.5 text-[11px] font-bold shrink-0">
+              <Shield size={12} strokeWidth={2.5} />
+              班委
+            </span>
+          )}
         </div>
         <button className="p-1.5 -mr-1.5 text-zinc-900 active:bg-zinc-200/60 rounded-full transition-colors flex items-center absolute right-3">
           <MoreHorizontal size={24} strokeWidth={2.5} />

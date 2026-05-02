@@ -1,4 +1,10 @@
 import { NextResponse } from "next/server";
+import { orgContextMap } from "@/src/lib/mockData";
+import {
+  parseUIRequest,
+  stripUIRequestBlocks,
+  buildCompleteSystemPrompt,
+} from "@/src/lib/uiRequestProtocol";
 
 const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
 
@@ -6,14 +12,31 @@ export async function POST(req: Request) {
   try {
     const { message, contextTitle } = await req.json();
 
+    // ── Legacy fallback: replyLogic (hardcoded pattern match) ──
+    // This is kept as a safety net for environments without DEEPSEEK_API_KEY.
+    // The primary path is now AI-driven ui-request protocol below.
+    const context = orgContextMap[contextTitle];
     const apiKey = process.env.DEEPSEEK_API_KEY;
+
     if (!apiKey) {
+      // No API key — fall back to replyLogic only
+      if (context?.replyLogic) {
+        const logicResult = context.replyLogic(message);
+        if (typeof logicResult === "object" && "type" in logicResult) {
+          return NextResponse.json({
+            reply: logicResult.content || "",
+            type: logicResult.type,
+            uiRequest: null,
+          });
+        }
+      }
       return NextResponse.json(
         { error: "DEEPSEEK_API_KEY is not configured on the server." },
         { status: 401 }
       );
     }
 
+    // ── Primary path: AI-driven with ui-request protocol ──
     const response = await fetch(DEEPSEEK_API_URL, {
       method: "POST",
       headers: {
@@ -25,7 +48,7 @@ export async function POST(req: Request) {
         messages: [
           {
             role: "system",
-            content: `You are the AI assistant for "${contextTitle}". Respond helpfully to the user's message. Keep the response concise and friendly. Use Chinese to reply.`,
+            content: buildCompleteSystemPrompt(contextTitle),
           },
           {
             role: "user",
@@ -46,9 +69,18 @@ export async function POST(req: Request) {
     }
 
     const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "";
+    const rawReply: string = data.choices?.[0]?.message?.content || "";
 
-    return NextResponse.json({ reply });
+    // Parse ui-request block from AI output
+    const uiRequest = parseUIRequest(rawReply);
+
+    // Strip ui-request block from user-visible reply
+    const reply = stripUIRequestBlocks(rawReply);
+
+    // Determine type for frontend rendering
+    const type = uiRequest ? "ui-card" : "text";
+
+    return NextResponse.json({ reply, type, uiRequest });
   } catch (error) {
     console.error("AI chat error:", error);
     return NextResponse.json(

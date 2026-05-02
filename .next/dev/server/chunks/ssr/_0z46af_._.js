@@ -9,6 +9,7 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-left.js [app-ssr] (ecmascript) <export default as ChevronLeft>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreHorizontal$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/ellipsis.js [app-ssr] (ecmascript) <export default as MoreHorizontal>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Shield$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/shield.js [app-ssr] (ecmascript) <export default as Shield>");
 "use client";
 ;
 ;
@@ -35,9 +36,29 @@ function ClassHeader({ currentOrgName, activeTab, setActiveTab, currentOrgRole, 
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "text-[18px] font-bold text-black tracking-wide w-full text-center pointer-events-none truncate px-10",
-                        children: currentOrgName
-                    }, void 0, false, {
+                        className: "text-[18px] font-bold text-black tracking-wide w-full text-center pointer-events-none truncate px-10 flex items-center justify-center gap-1.5",
+                        children: [
+                            currentOrgName,
+                            currentOrgRole === "admin" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "inline-flex items-center gap-0.5 bg-blue-50 text-blue-600 rounded-full px-2 py-0.5 text-[11px] font-bold shrink-0",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Shield$3e$__["Shield"], {
+                                        size: 12,
+                                        strokeWidth: 2.5
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/ClassHeader.tsx",
+                                        lineNumber: 34,
+                                        columnNumber: 15
+                                    }, this),
+                                    "班委"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/ClassHeader.tsx",
+                                lineNumber: 33,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/src/components/ClassHeader.tsx",
                         lineNumber: 30,
                         columnNumber: 9
@@ -49,12 +70,12 @@ function ClassHeader({ currentOrgName, activeTab, setActiveTab, currentOrgRole, 
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/src/components/ClassHeader.tsx",
-                            lineNumber: 34,
+                            lineNumber: 40,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/ClassHeader.tsx",
-                        lineNumber: 33,
+                        lineNumber: 39,
                         columnNumber: 9
                     }, this)
                 ]
@@ -77,13 +98,13 @@ function ClassHeader({ currentOrgName, activeTab, setActiveTab, currentOrgRole, 
                                     className: "absolute bottom-0 left-1/2 -translate-x-1/2 w-[24px] h-[3px] bg-blue-500 rounded-full"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ClassHeader.tsx",
-                                    lineNumber: 47,
+                                    lineNumber: 53,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ClassHeader.tsx",
-                            lineNumber: 41,
+                            lineNumber: 47,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -95,24 +116,24 @@ function ClassHeader({ currentOrgName, activeTab, setActiveTab, currentOrgRole, 
                                     className: "absolute bottom-0 left-1/2 -translate-x-1/2 w-[24px] h-[3px] bg-blue-500 rounded-full"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ClassHeader.tsx",
-                                    lineNumber: 56,
+                                    lineNumber: 62,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ClassHeader.tsx",
-                            lineNumber: 50,
+                            lineNumber: 56,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ClassHeader.tsx",
-                    lineNumber: 40,
+                    lineNumber: 46,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/ClassHeader.tsx",
-                lineNumber: 39,
+                lineNumber: 45,
                 columnNumber: 7
             }, this)
         ]
@@ -964,6 +985,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                         onClick: (e)=>{
                                             if (org.name === "我的班级") {
                                                 // Follow link to /student
+                                                setCurrentOrgRole("admin");
                                                 return;
                                             }
                                             e.preventDefault();
@@ -982,20 +1004,20 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         className: `text-white/20 w-7 h-7 absolute ${org.id === "1" ? "block" : "hidden"}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 184,
+                                                        lineNumber: 185,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(org.icon, {
                                                         className: "text-white w-6 h-6 stroke-[2] relative z-10"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 188,
+                                                        lineNumber: 189,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                lineNumber: 181,
+                                                lineNumber: 182,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1008,12 +1030,12 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                             children: org.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 194,
+                                                            lineNumber: 195,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 193,
+                                                        lineNumber: 194,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1027,18 +1049,18 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 200,
+                                                            lineNumber: 201,
                                                             columnNumber: 23
                                                         }, this) : org.summary
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 198,
+                                                        lineNumber: 199,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                lineNumber: 192,
+                                                lineNumber: 193,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1049,7 +1071,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         children: org.time
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 214,
+                                                        lineNumber: 215,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1060,14 +1082,14 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                                 children: "管理员"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                                lineNumber: 220,
+                                                                lineNumber: 221,
                                                                 columnNumber: 23
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "px-1.5 py-0.5 rounded bg-[#ebedf0] text-[#555] text-[10px] font-bold",
                                                                 children: "成员"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                                lineNumber: 224,
+                                                                lineNumber: 225,
                                                                 columnNumber: 23
                                                             }, this),
                                                             org.unread > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1075,19 +1097,19 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                                 children: org.unread
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                                lineNumber: 230,
+                                                                lineNumber: 231,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 218,
+                                                        lineNumber: 219,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                lineNumber: 213,
+                                                lineNumber: 214,
                                                 columnNumber: 17
                                             }, this)
                                         ]
@@ -1116,7 +1138,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     className: "text-blue-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 245,
+                                                    lineNumber: 246,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1124,13 +1146,13 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     children: "AI 校园热搜"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 246,
+                                                    lineNumber: 247,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 244,
+                                            lineNumber: 245,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1143,7 +1165,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         children: "#民法典讲座 提前排队"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 252,
+                                                        lineNumber: 253,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1151,7 +1173,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         children: "#二食堂炸鸡 恢复营业啦！"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 255,
+                                                        lineNumber: 256,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1159,7 +1181,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         children: "#英语四级报名 还有最后2天"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 258,
+                                                        lineNumber: 259,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1167,7 +1189,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         children: "#民法典讲座 提前排队"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 262,
+                                                        lineNumber: 263,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1175,7 +1197,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         children: "#二食堂炸鸡 恢复营业啦！"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 265,
+                                                        lineNumber: 266,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1183,24 +1205,24 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                         children: "#英语四级报名 还有最后2天"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 268,
+                                                        lineNumber: 269,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                lineNumber: 251,
+                                                lineNumber: 252,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 250,
+                                            lineNumber: 251,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 243,
+                                    lineNumber: 244,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1214,7 +1236,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     className: "w-6 h-6 rounded-full bg-zinc-200"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 281,
+                                                    lineNumber: 282,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1222,13 +1244,13 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     children: "吃货小分队"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 282,
+                                                    lineNumber: 283,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 280,
+                                            lineNumber: 281,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1236,7 +1258,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                             children: "谁知道二食堂那家炸鸡什么时候恢复营业啊？等好几天了，真的很想吃😭"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 287,
+                                            lineNumber: 288,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1247,7 +1269,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     children: "10分钟前"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 291,
+                                                    lineNumber: 292,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1257,7 +1279,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 293,
+                                                            lineNumber: 294,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1265,19 +1287,19 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                             children: "12"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 294,
+                                                            lineNumber: 295,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 292,
+                                                    lineNumber: 293,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 290,
+                                            lineNumber: 291,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1291,7 +1313,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 304,
+                                                    lineNumber: 305,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1299,19 +1321,19 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     children: "AI 摘要"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 305,
+                                                    lineNumber: 306,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 297,
+                                            lineNumber: 298,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 276,
+                                    lineNumber: 277,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1325,7 +1347,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     className: "w-6 h-6 rounded-full bg-zinc-200"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 315,
+                                                    lineNumber: 316,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1333,13 +1355,13 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     children: "法学院小透明"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 316,
+                                                    lineNumber: 317,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 314,
+                                            lineNumber: 315,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1347,7 +1369,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                             children: "这周四下午的民法典讲座有人去吗？我占座多一个位置，先到先得~"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 321,
+                                            lineNumber: 322,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1357,12 +1379,12 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                 className: "text-zinc-300"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                lineNumber: 325,
+                                                lineNumber: 326,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 324,
+                                            lineNumber: 325,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1373,7 +1395,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     children: "45分钟前"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 328,
+                                                    lineNumber: 329,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1383,7 +1405,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 330,
+                                                            lineNumber: 331,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1391,19 +1413,19 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                             children: "34"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 331,
+                                                            lineNumber: 332,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 329,
+                                                    lineNumber: 330,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 327,
+                                            lineNumber: 328,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1417,7 +1439,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 341,
+                                                    lineNumber: 342,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1425,25 +1447,25 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                                     children: "AI 摘要"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 342,
+                                                    lineNumber: 343,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 334,
+                                            lineNumber: 335,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 310,
+                                    lineNumber: 311,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 241,
+                            lineNumber: 242,
                             columnNumber: 11
                         }, this)
                     ]
@@ -1469,7 +1491,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                 className: "mb-0.5"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 352,
+                                lineNumber: 353,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1477,13 +1499,13 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                 children: "消息"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 353,
+                                lineNumber: 354,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 351,
+                        lineNumber: 352,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1498,20 +1520,20 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                         className: "mb-0.5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 357,
+                                        lineNumber: 358,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "absolute -top-1 -right-1 w-[9px] h-[9px] bg-[#f54f46] rounded-full border-[1.5px] border-white"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 358,
+                                        lineNumber: 359,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 356,
+                                lineNumber: 357,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1519,13 +1541,13 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                 children: "频道"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 360,
+                                lineNumber: 361,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 355,
+                        lineNumber: 356,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1537,7 +1559,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                 className: "mb-0.5"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 363,
+                                lineNumber: 364,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1545,13 +1567,13 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                 children: "联系人"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 364,
+                                lineNumber: 365,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 362,
+                        lineNumber: 363,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1563,7 +1585,7 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                 className: "mb-0.5"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 367,
+                                lineNumber: 368,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1571,19 +1593,19 @@ function HomeView({ activeSchoolTab, setActiveSchoolTab, isGlobalAiExpanded, set
                                 children: "动态"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 368,
+                                lineNumber: 369,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 366,
+                        lineNumber: 367,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/HomeView.tsx",
-                lineNumber: 350,
+                lineNumber: 351,
                 columnNumber: 7
             }, this)
         ]
@@ -3959,14 +3981,365 @@ __turbopack_context__.s([
     ()=>ChatTimeline
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-ssr] (ecmascript) <export default as User>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bot$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bot$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/bot.js [app-ssr] (ecmascript) <export default as Bot>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/zap.js [app-ssr] (ecmascript) <export default as Zap>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/map-pin.js [app-ssr] (ecmascript) <export default as MapPin>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$compass$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Compass$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/compass.js [app-ssr] (ecmascript) <export default as Compass>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-ssr] (ecmascript) <export default as Clock>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$crosshair$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Crosshair$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/crosshair.js [app-ssr] (ecmascript) <export default as Crosshair>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$qr$2d$code$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__QrCode$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/qr-code.js [app-ssr] (ecmascript) <export default as QrCode>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-check-big.js [app-ssr] (ecmascript) <export default as CheckCircle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$send$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Send$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/send.js [app-ssr] (ecmascript) <export default as Send>");
 "use client";
 ;
 ;
+;
+/* ───── CheckinConfigCard (interactive wizard) ───── */ const SCENE_TEMPLATES = [
+    {
+        label: "晚自习",
+        title: "晚自习签到"
+    },
+    {
+        label: "讲座",
+        title: "讲座签到"
+    },
+    {
+        label: "专业课",
+        title: "专业课签到"
+    }
+];
+const RANGE_OPTIONS = [
+    {
+        label: "当前位置",
+        value: "precise"
+    },
+    {
+        label: "法学楼(500m)",
+        value: "500m"
+    },
+    {
+        label: "全校范围",
+        value: "campus"
+    }
+];
+const MODE_OPTIONS = [
+    {
+        label: "GPS",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$crosshair$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Crosshair$3e$__["Crosshair"],
+        value: "gps"
+    },
+    {
+        label: "动态二维码",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$qr$2d$code$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__QrCode$3e$__["QrCode"],
+        value: "qr"
+    },
+    {
+        label: "普通打卡",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__["CheckCircle"],
+        value: "tap"
+    }
+];
+function formatDeadline(durationMinutes) {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + durationMinutes);
+    return now.toLocaleTimeString("zh-CN", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+const CheckinConfigCard = ()=>{
+    const [title, setTitle] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [duration, setDuration] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(30);
+    const [range, setRange] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("500m");
+    const [mode, setMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("gps");
+    const [published, setPublished] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const deadline = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>formatDeadline(duration), [
+        duration
+    ]);
+    const handlePublish = ()=>{
+        const finalTitle = title || "签到任务";
+        setPublished(true);
+        // Simulate a server call
+        setTimeout(()=>{
+            alert(`✅ 已发布「${finalTitle}」\n⏱ 截止 ${deadline}\n📍 范围 ${RANGE_OPTIONS.find((r)=>r.value === range)?.label}\n🔐 模式 ${MODE_OPTIONS.find((m)=>m.value === mode)?.label}`);
+        }, 300);
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-white rounded-[20px] rounded-tl-sm shadow-[0_2px_12px_rgba(0,0,0,0.02)] overflow-hidden w-full border border-emerald-100/60",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-emerald-50/80 px-4 py-3 border-b border-emerald-100/50 flex items-center gap-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
+                            size: 12,
+                            strokeWidth: 3
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/ChatTimeline.tsx",
+                            lineNumber: 84,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0))
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 83,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-[14px] font-bold text-emerald-900",
+                        children: "发布签到配置"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 86,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    published && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "ml-auto text-[11px] font-bold text-emerald-600 bg-emerald-100/60 px-2 py-0.5 rounded-md",
+                        children: "已发布"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 90,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/ChatTimeline.tsx",
+                lineNumber: 82,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "p-4 space-y-4",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "text-[11px] text-zinc-400 font-bold mb-2 uppercase tracking-wide",
+                                children: "场景模板"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 99,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex gap-2",
+                                children: SCENE_TEMPLATES.map((tpl)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        disabled: published,
+                                        onClick: ()=>setTitle(tpl.title),
+                                        className: `px-4 py-1.5 rounded-full text-[12px] font-bold border transition-all active:scale-95 ${title === tpl.title ? "bg-emerald-500 text-white border-emerald-500 shadow-sm" : "bg-white text-zinc-600 border-zinc-200 hover:border-emerald-300 hover:text-emerald-600"} ${published ? "opacity-60 pointer-events-none" : ""}`,
+                                        children: tpl.label
+                                    }, tpl.label, false, {
+                                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                                        lineNumber: 104,
+                                        columnNumber: 15
+                                    }, ("TURBOPACK compile-time value", void 0)))
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 102,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 98,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center justify-between mb-1.5",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-[11px] text-zinc-400 font-bold uppercase tracking-wide",
+                                        children: "签到时长"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                                        lineNumber: 124,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-[13px] font-bold text-emerald-700 flex items-center gap-1",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
+                                                size: 14
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                                lineNumber: 128,
+                                                columnNumber: 15
+                                            }, ("TURBOPACK compile-time value", void 0)),
+                                            deadline,
+                                            " 截止"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                                        lineNumber: 127,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 123,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center gap-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-[11px] text-zinc-400 w-8 text-right",
+                                        children: [
+                                            duration,
+                                            "min"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                                        lineNumber: 133,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "range",
+                                        min: "5",
+                                        max: "60",
+                                        step: "5",
+                                        value: duration,
+                                        disabled: published,
+                                        onChange: (e)=>setDuration(Number(e.target.value)),
+                                        className: "flex-1 h-2 rounded-full appearance-none cursor-pointer bg-zinc-200   [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5   [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-emerald-500   [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer   [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:active:scale-110   disabled:opacity-40 disabled:cursor-not-allowed"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                                        lineNumber: 136,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 132,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 122,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "text-[11px] text-zinc-400 font-bold mb-2 uppercase tracking-wide",
+                                children: "有效范围"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 156,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex gap-2",
+                                children: RANGE_OPTIONS.map((opt)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        disabled: published,
+                                        onClick: ()=>setRange(opt.value),
+                                        className: `flex-1 py-2 rounded-xl text-[12px] font-bold border transition-all active:scale-95 ${range === opt.value ? "bg-emerald-50 border-emerald-400 text-emerald-700" : "bg-zinc-50 border-zinc-100 text-zinc-500 hover:border-zinc-300"} ${published ? "opacity-60 pointer-events-none" : ""}`,
+                                        children: opt.label
+                                    }, opt.value, false, {
+                                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                                        lineNumber: 161,
+                                        columnNumber: 15
+                                    }, ("TURBOPACK compile-time value", void 0)))
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 159,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 155,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "text-[11px] text-zinc-400 font-bold mb-2 uppercase tracking-wide",
+                                children: "签到模式"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 180,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex bg-zinc-100 rounded-xl p-1 gap-1",
+                                children: MODE_OPTIONS.map((opt)=>{
+                                    const Icon = opt.icon;
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        disabled: published,
+                                        onClick: ()=>setMode(opt.value),
+                                        className: `flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-bold transition-all active:scale-95 ${mode === opt.value ? "bg-white text-emerald-700 shadow-sm" : "text-zinc-500 hover:text-zinc-700"} ${published ? "opacity-60 pointer-events-none" : ""}`,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
+                                                size: 14
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                                lineNumber: 198,
+                                                columnNumber: 19
+                                            }, ("TURBOPACK compile-time value", void 0)),
+                                            opt.label
+                                        ]
+                                    }, opt.value, true, {
+                                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                                        lineNumber: 187,
+                                        columnNumber: 17
+                                    }, ("TURBOPACK compile-time value", void 0));
+                                })
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ChatTimeline.tsx",
+                                lineNumber: 183,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 179,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        type: "button",
+                        onClick: handlePublish,
+                        disabled: published,
+                        className: "w-full bg-emerald-500 text-white font-bold py-3 rounded-xl   active:bg-emerald-600 transition-colors shadow-sm flex items-center justify-center gap-2   disabled:opacity-50 disabled:cursor-not-allowed",
+                        children: published ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                            children: "✅ 已推送给全班"
+                        }, void 0, false) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$send$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Send$3e$__["Send"], {
+                                    size: 16
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/ChatTimeline.tsx",
+                                    lineNumber: 219,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                " 确认发布并推送"
+                            ]
+                        }, void 0, true)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/ChatTimeline.tsx",
+                        lineNumber: 207,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/ChatTimeline.tsx",
+                lineNumber: 96,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/ChatTimeline.tsx",
+        lineNumber: 78,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0));
+};
 function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, messagesEndRef, orgContextMap }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex-1 overflow-y-auto px-4 py-5 space-y-6 hide-scrollbar flex flex-col pb-32",
@@ -3980,19 +4353,19 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                            lineNumber: 35,
+                            lineNumber: 242,
                             columnNumber: 11
                         }, this),
                         orgContextMap[currentOrgName]?.aiTitle || "AI 助手"
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                    lineNumber: 34,
+                    lineNumber: 241,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                lineNumber: 33,
+                lineNumber: 240,
                 columnNumber: 7
             }, this),
             messages.map((msg)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4004,18 +4377,18 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                 size: 20
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                                lineNumber: 50,
-                                columnNumber: 15
+                                lineNumber: 262,
+                                columnNumber: 36
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bot$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bot$3e$__["Bot"], {
                                 size: 20
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                                lineNumber: 52,
-                                columnNumber: 15
+                                lineNumber: 262,
+                                columnNumber: 57
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                            lineNumber: 46,
+                            lineNumber: 255,
                             columnNumber: 11
                         }, this),
                         msg.type === "text" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4023,7 +4396,7 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                             children: msg.content
                         }, void 0, false, {
                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                            lineNumber: 58,
+                            lineNumber: 267,
                             columnNumber: 13
                         }, this),
                         msg.type === "books" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4037,7 +4410,7 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                             className: "text-blue-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 69,
+                                            lineNumber: 282,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4045,13 +4418,13 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                             children: "教材征订 (智能分发)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 70,
+                                            lineNumber: 283,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                    lineNumber: 68,
+                                    lineNumber: 281,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4063,12 +4436,12 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                                 size: 24
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                                                lineNumber: 76,
+                                                lineNumber: 289,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 75,
+                                            lineNumber: 288,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4076,7 +4449,7 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                             children: "已向全班下发征订卡片"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 78,
+                                            lineNumber: 291,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4084,19 +4457,19 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                             children: "学生确权后将自动留存在工作台"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 81,
+                                            lineNumber: 294,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                    lineNumber: 74,
+                                    lineNumber: 287,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                            lineNumber: 67,
+                            lineNumber: 280,
                             columnNumber: 13
                         }, this),
                         msg.type === "checkin" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4115,12 +4488,12 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                                         strokeWidth: 3
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/ChatTimeline.tsx",
-                                                        lineNumber: 94,
+                                                        lineNumber: 307,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                                    lineNumber: 93,
+                                                    lineNumber: 306,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4128,13 +4501,13 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                                     children: "晚自习签到"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                                    lineNumber: 96,
+                                                    lineNumber: 309,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 92,
+                                            lineNumber: 305,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4142,13 +4515,13 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                             children: "进行中"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 100,
+                                            lineNumber: 313,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                    lineNumber: 91,
+                                    lineNumber: 304,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4162,7 +4535,7 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                                     children: "有效定位范围"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                                    lineNumber: 106,
+                                                    lineNumber: 319,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4170,13 +4543,13 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                                     children: "500米内"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                                    lineNumber: 109,
+                                                    lineNumber: 322,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 105,
+                                            lineNumber: 318,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4188,7 +4561,7 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                                         size: 18
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/ChatTimeline.tsx",
-                                                        lineNumber: 125,
+                                                        lineNumber: 338,
                                                         columnNumber: 23
                                                     }, this),
                                                     " 一键立即签到"
@@ -4196,25 +4569,30 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                             }, void 0, true) : "查看签到大屏看板"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                                            lineNumber: 113,
+                                            lineNumber: 326,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                                    lineNumber: 104,
+                                    lineNumber: 317,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                            lineNumber: 90,
+                            lineNumber: 303,
                             columnNumber: 13
+                        }, this),
+                        msg.type === "checkin-config" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(CheckinConfigCard, {}, void 0, false, {
+                            fileName: "[project]/src/components/ChatTimeline.tsx",
+                            lineNumber: 349,
+                            columnNumber: 45
                         }, this)
                     ]
                 }, msg.id, true, {
                     fileName: "[project]/src/components/ChatTimeline.tsx",
-                    lineNumber: 42,
+                    lineNumber: 249,
                     columnNumber: 9
                 }, this)),
             isAiThinking && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4226,12 +4604,12 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                             size: 20
                         }, void 0, false, {
                             fileName: "[project]/src/components/ChatTimeline.tsx",
-                            lineNumber: 141,
+                            lineNumber: 357,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/ChatTimeline.tsx",
-                        lineNumber: 140,
+                        lineNumber: 356,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4241,33 +4619,33 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                                 className: "w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                                lineNumber: 144,
+                                lineNumber: 360,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                                lineNumber: 145,
+                                lineNumber: 361,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-2 h-2 bg-blue-400 rounded-full animate-bounce"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                                lineNumber: 146,
+                                lineNumber: 362,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ChatTimeline.tsx",
-                        lineNumber: 143,
+                        lineNumber: 359,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                lineNumber: 139,
+                lineNumber: 355,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4275,13 +4653,13 @@ function ChatTimeline({ messages, isAiThinking, currentOrgName, currentOrgRole, 
                 className: "h-4 w-full shrink-0"
             }, void 0, false, {
                 fileName: "[project]/src/components/ChatTimeline.tsx",
-                lineNumber: 151,
+                lineNumber: 367,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/ChatTimeline.tsx",
-        lineNumber: 31,
+        lineNumber: 238,
         columnNumber: 5
     }, this);
 }
@@ -4484,6 +4862,12 @@ function PosterShareModal({ show, onClose }) {
 "use strict";
 
 __turbopack_context__.s([
+    "CLASS_ADMIN_PROFILE",
+    ()=>CLASS_ADMIN_PROFILE,
+    "MINIMALIST_STUDENT_PROFILE",
+    ()=>MINIMALIST_STUDENT_PROFILE,
+    "OPPORTUNITY_HUNTER_PROFILE",
+    ()=>OPPORTUNITY_HUNTER_PROFILE,
     "QUICK_ACTIONS",
     ()=>QUICK_ACTIONS,
     "mockTasks",
@@ -4508,7 +4892,7 @@ const QUICK_ACTIONS = [
         id: "books",
         icon: "📚",
         label: "征订班级教材",
-        prompt: "开启新一轮的班级教材征订，专业课包括法理学、民法典等。"
+        prompt: "开启新一轮的班级教材征订，专业课教材由系统自动汇总，各位同学核对即可。"
     },
     {
         id: "homework",
@@ -4520,10 +4904,16 @@ const QUICK_ACTIONS = [
 const orgContextMap = {
     我的班级: {
         aiTitle: "AI 班级管家 (已接入教务数据)",
-        initialMessage: "辅导员魏老师最新通知：本周《民法典》期末复习资料已由我自动上传至资产仓，请提醒同学们查阅。目前还有3人未提交毕业论文定稿。",
+        initialMessage: "辅导员魏老师最新通知：本周课程复习资料已由我自动上传至资产仓，请提醒同学们查阅。目前还有3人未提交课程作业定稿。",
         replyLogic: (text)=>{
+            if (text.includes("发布签到") || text.includes("我要签到")) {
+                return {
+                    type: "checkin-config",
+                    content: ""
+                };
+            }
             if (text.includes("整理")) return "正在为您整理班级周报... 已提取本周考勤、作业提交情况及校园活动参与数据，预计生成需 3 秒。";
-            if (text.includes("催促")) return "已为您标记未交论文定稿的 3 名同学。是否需要我通过系统向他们发送一键催办提醒？";
+            if (text.includes("催促")) return "已为您标记未交课程作业的 3 名同学。是否需要我通过系统向他们发送一键催办提醒？";
             return "指令明确。已为您记录，我将继续跟进相关行政执行情况。";
         }
     },
@@ -4535,17 +4925,23 @@ const orgContextMap = {
         }
     },
     志愿者服务: {
-        aiTitle: "AI 公益小助手",
-        initialMessage: '温馨提示："周末敬老院活动"目前尚缺 2 名志愿者报名。您本学期累计志愿时长为 18 小时，距评优还差 2 小时。',
+        aiTitle: "AI 机会雷达",
+        initialMessage: "已为您接入 5 个校级/院级活动群，正在实时扫描中... 本日监测到 3 个高含金量机会：①【全国大学生数学建模竞赛】匹配度最高（省级奖项），报名倒计时 2 天；②【社区支教志愿者】名额 8 个（可加综测分）；③【校运会开幕式表演志愿者】名额 15 个（通识学分）。建议优先锁定第①项。",
         replyLogic: (text)=>{
-            return "如需报名周末敬老院活动，您可以点击[此处报名链接]。志愿时长认证标准：单次活动服务满3小时计入基础工时，交通补贴等细节可查阅活动细则。";
+            if (text.includes("竞赛") || text.includes("加分") || text.includes("综测") || text.includes("数学建模")) {
+                return "已为您实时扫描 5 个相关群组。检测到【全国大学生数学建模竞赛】报名倒计时 2 天（省级奖项，综测加分 3 分），已为您预填报名表，点击即可发送。";
+            }
+            if (text.includes("志愿") || text.includes("活动") || text.includes("报名")) {
+                return "为您聚合 5 个群组最新招募信息：①【全国大学生数学建模竞赛】倒计时 2 天（省级·加分 3 分）；②【社区支教志愿者】名额 8 个（校级·加分 1.5 分）；③【校运会开幕式表演志愿者】名额 15 个（通识学分）。建议优先抢报第①项，点击即可预填报名。";
+            }
+            return "正在为您持续监测 5 个群组动态。如需筛选特定类型机会（如竞赛/支教/实习/社会实践），请直接告诉我您的偏好，AI 将为您精准匹配。";
         }
     }
 };
 const mockTasks = [
     {
         id: '1',
-        title: '期中论文定稿及查重报告',
+        title: '课程作业提交及查重报告',
         deadline: '今天 23:59 截止',
         sourceOrg: '我的班级',
         status: 'pending',
@@ -4621,6 +5017,136 @@ const mockTasks = [
         formId: 'training'
     }
 ];
+const CLASS_ADMIN_PROFILE = {
+    roleName: "班级行政主理人（劳模班委）",
+    managementScale: "行政班级全员",
+    coreTasks: [
+        {
+            title: "整理信息",
+            description: "把教务处发的一长串公文拆成 3 条同学看得懂的执行指令。"
+        },
+        {
+            title: "收费确权",
+            description: "逐一核对全班同学的转账截图和名单，确保不重不漏。"
+        },
+        {
+            title: "考勤管理",
+            description: "发布签到任务，核实每个人的定位和到勤情况。"
+        }
+    ],
+    corePainPoints: [
+        {
+            title: "重复劳动",
+            description: "每天花 2 小时人肉对账，截图翻到手软，纯纯体力活。"
+        },
+        {
+            title: "社交压力",
+            description: "在班群一遍遍催截图催缴费，刷屏怕被嫌烦，不刷又收不齐。"
+        }
+    ],
+    aiAccessPoints: [
+        {
+            title: "截图自动识别",
+            description: "AI 自动读取同学们发的转账截图，比对名单一键确权，人肉 4 小时的活缩到 3 分钟。"
+        },
+        {
+            title: "非侵入式代催",
+            description: "不用你在群里刷屏，「摸鱼同桌」人格代替你私聊提醒，同学不反感，你也不用当恶人。"
+        }
+    ]
+};
+const MINIMALIST_STUDENT_PROFILE = {
+    roleName: "极简履行者（屏蔽达人）",
+    managementScale: "同时关注 3 个综合信息频道",
+    coreTasks: [
+        {
+            title: "信息过滤",
+            description: "从学生会群、年级大群的几百条消息中，捞出真正跟自己有关的通知。"
+        },
+        {
+            title: "任务识别",
+            description: "快速分辨「需要我填的表」「需要我缴的费」「需要我确认的截止时间」。"
+        },
+        {
+            title: "极速履行",
+            description: "在截止时间之前完成填报、缴费、确认，不留尾巴。"
+        }
+    ],
+    corePainPoints: [
+        {
+            title: "群聊疲劳",
+            description: "打开微信就是 99+，翻半天才找到那条通知，中间夹着几百条「收到」「好的」和表情包。"
+        },
+        {
+            title: "漏看焦虑",
+            description: "每次群消息一多就下意识划过，等回过神来发现截止时间已经过了，只能尴尬私聊班长。"
+        },
+        {
+            title: "社交负担",
+            description: "不想整天盯着群聊，但又怕错过重要事情，被迫成为「群奴」。"
+        }
+    ],
+    aiAccessPoints: [
+        {
+            title: "噪音过滤",
+            description: "AI 自动剔除闲聊、表情包、「收到」刷屏，只把真正需要你处理的任务以卡片形式置顶。"
+        },
+        {
+            title: "免进群秒完成",
+            description: "收到任务卡片后直接在卡片里操作——填表、缴费、确认，不用点进 99+ 的群聊翻找上下文。"
+        },
+        {
+            title: "智能提醒",
+            description: "快到截止时间还没处理的任务，AI 会悄悄提醒你，不@所有人、不社死、刚刚好。"
+        }
+    ]
+};
+const OPPORTUNITY_HUNTER_PROFILE = {
+    roleName: "机会猎人（抢单射手）",
+    managementScale: "同时盯着 5 个竞赛/志愿/活动招募群",
+    coreTasks: [
+        {
+            title: "跨群监测",
+            description: "实时扫描多个校级/院级群的招募信息，大创、竞赛、志愿、实习一条都不漏。"
+        },
+        {
+            title: "秒级响应",
+            description: "看到高含金量机会的第一时间打开报名链接，跟全校同学拼手速。"
+        },
+        {
+            title: "材料速填",
+            description: "学号、班级、手机号、个人简介——每次报名都要重新敲一遍，烦得要死但不敢出错。"
+        }
+    ],
+    corePainPoints: [
+        {
+            title: "信息碎片化",
+            description: "好机会散落在几十个群公告、公众号推文、辅导员朋友圈里，根本盯不过来。"
+        },
+        {
+            title: "手慢无",
+            description: "大创队友招募、数学建模组队、支教名额——发出来 3 分钟就满了，全看运气和网速。"
+        },
+        {
+            title: "填表地狱",
+            description: "每次抢名额都要重新填一遍表单：学号、班级、手机号、个人陈述……等填完名额早没了。"
+        }
+    ],
+    aiAccessPoints: [
+        {
+            title: "跨频道实时聚合",
+            description: "AI 24 小时监听所有公开频道，把散落的机会按「加分」「社会实践」「省奖」等关键词聚合成一个信息流。"
+        },
+        {
+            title: "自动预填秒抢",
+            description: "检测到匹配的机会时，AI 自动把你的学号、班级、手机号预填入报名表，你只需点一下确认。"
+        },
+        {
+            title: "自然语言检索",
+            description: "开口就问：「最近有没有能加综测分的竞赛？」——AI 直接帮你从几个群的消息里精准筛出来。"
+        }
+    ]
+};
 }),
 "[project]/app/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -4747,10 +5273,11 @@ function App() {
             });
             const data = await response.json();
             const reply = response.ok ? data.reply : "抱歉，服务器出现了点问题。";
+            const msgType = response.ok && data.type ? data.type : "text";
             const newMsg = {
                 id: (Date.now() + 1).toString(),
                 role: "ai",
-                type: "text",
+                type: msgType,
                 content: reply
             };
             setMessages((prev)=>[
@@ -4824,12 +5351,12 @@ function App() {
                             className: "w-[124px] h-7 bg-[#101010] rounded-b-3xl"
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 200,
+                            lineNumber: 201,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 199,
+                        lineNumber: 200,
                         columnNumber: 9
                     }, this),
                     view === "home" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$HomeView$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["HomeView"], {
@@ -4842,7 +5369,7 @@ function App() {
                         setView: setView
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 205,
+                        lineNumber: 206,
                         columnNumber: 11
                     }, this),
                     view === "class" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4856,7 +5383,7 @@ function App() {
                                 onBack: ()=>setView("home")
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 219,
+                                lineNumber: 220,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4874,7 +5401,7 @@ function App() {
                                                 orgContextMap: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockData$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["orgContextMap"]
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 230,
+                                                lineNumber: 231,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatInputBar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4889,13 +5416,13 @@ function App() {
                                                 handleSend: handleSend
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 238,
+                                                lineNumber: 239,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 229,
+                                        lineNumber: 230,
                                         columnNumber: 17
                                     }, this),
                                     activeTab === "vault" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$VaultView$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4927,19 +5454,19 @@ function App() {
                                         mockTasks: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockData$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockTasks"]
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 254,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 227,
+                                lineNumber: 228,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 218,
+                        lineNumber: 219,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PreferencesModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4953,7 +5480,7 @@ function App() {
                         setStudentExtraMsgs: setStudentExtraMsgs
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 287,
+                        lineNumber: 288,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SurveyFormModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4965,7 +5492,7 @@ function App() {
                         onSubmit: handleSurveySubmit
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 298,
+                        lineNumber: 299,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$QuickActionsPanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4984,7 +5511,7 @@ function App() {
                         setNewActionPrompt: setNewActionPrompt
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 307,
+                        lineNumber: 308,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PosterShareModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4992,7 +5519,7 @@ function App() {
                         onClose: ()=>setShowPosterShare(false)
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 323,
+                        lineNumber: 324,
                         columnNumber: 9
                     }, this),
                     toastMessage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5002,18 +5529,18 @@ function App() {
                             children: toastMessage
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 331,
+                            lineNumber: 332,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 330,
+                        lineNumber: 331,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 197,
+                lineNumber: 198,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
@@ -5035,13 +5562,13 @@ function App() {
       `
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 339,
+                lineNumber: 340,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 196,
+        lineNumber: 197,
         columnNumber: 5
     }, this);
 }

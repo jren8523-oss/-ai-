@@ -1,371 +1,538 @@
 "use client";
-import React from "react";
+
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Plus,
   MessageCircle,
   Hash,
   Users,
   Compass,
-  ChevronLeft,
-  Shield,
-  Sparkles,
+  ChevronUp,
+  ChevronRight,
   Bot,
-  Image as ImageIcon,
-  Heart,
+  Star,
+  Calendar,
+  Megaphone,
+  Clock,
+  ArrowLeft,
 } from "lucide-react";
+import {
+  mockTasks,
+  mockPosts,
+  calendarEvents,
+  dailyBriefings,
+} from "@/src/lib/mockData";
+import {
+  useAiAssistant,
+  getAvatarByLevel,
+  getAccessoryByLevel,
+} from "@/src/store/aiAssistantStore";
+import { generateDailySummary } from "@/src/lib/semanticRewriter";
+import type { RewriteResult } from "@/src/lib/semanticRewriter";
+import { useFavorites } from "@/src/store/favoritesStore";
+import { useCalendar, normalizeDate } from "@/src/store/calendarStore";
+import { useToast } from "@/src/components/Toast";
+import BookmarkOverlay from "@/src/components/BookmarkOverlay";
+import type { CalendarEvent } from "@/src/store/calendarStore";
 
-// ===================== Data =====================
-const orgList = [
-  {
-    id: "1",
-    name: "我的班级",
-    icon: Shield,
-    unread: 2,
-    summary: "2项高优待办：毕业论文定稿...",
-    role: "admin",
-    colors: "from-blue-500 to-indigo-600",
-    time: "10:24",
-  },
-  {
-    id: "2",
-    name: "院学生会",
-    icon: Users,
-    unread: 3,
-    summary: "[AI 总结] 收集“迎新晚会”策划案...",
-    role: "member",
-    colors: "from-orange-400 to-red-500",
-    time: "昨天",
-  },
-  {
-    id: "3",
-    name: "志愿者服务",
-    icon: Heart,
-    unread: 2,
-    summary: "[AI 总结] 周末敬老院活动报名名单确认...",
-    role: "member",
-    colors: "from-green-500 to-emerald-600",
-    time: "10-12",
-  },
-];
+// ─────────────────────────────────────────────────────
+// Helpers (stable on mount, not per-render)
+// ─────────────────────────────────────────────────────
+const getNextEventCountdown = (): string => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const upcoming = calendarEvents
+    .map((e) => ({ ...e, d: new Date(e.date) }))
+    .filter((e) => e.d.getTime() >= today.getTime())
+    .sort((a, b) => a.d.getTime() - b.d.getTime());
+  if (upcoming.length === 0) return "暂无日程";
+  const next = upcoming[0];
+  const diff = Math.ceil(
+    (next.d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  return diff === 0
+    ? `今天 · ${next.title}`
+    : `距"${next.title}" ${diff} 天`;
+};
 
-// ===================== Types =====================
-type SchoolTab = "orgs" | "feed";
-type OrgRole = "admin" | "member";
-
-interface HomeViewProps {
-  activeSchoolTab: SchoolTab;
-  setActiveSchoolTab: (tab: SchoolTab) => void;
-  isGlobalAiExpanded: boolean;
-  setIsGlobalAiExpanded: (v: boolean) => void;
-  setCurrentOrgName: (name: string) => void;
-  setCurrentOrgRole: (role: OrgRole) => void;
-  setView: (view: "home" | "class") => void;
-}
-
-// ===================== Component =====================
-export function HomeView({
-  activeSchoolTab,
-  setActiveSchoolTab,
-  isGlobalAiExpanded,
-  setIsGlobalAiExpanded,
-  setCurrentOrgName,
-  setCurrentOrgRole,
-  setView,
-}: HomeViewProps) {
-  const router = useRouter();
+// ─────────────────────────────────────────────────────
+// Subcomponent: Micro Avatar (32px with accessory)
+// ─────────────────────────────────────────────────────
+function MicroAvatar({ growthLevel }: { growthLevel: number }) {
+  const emoji = getAvatarByLevel(growthLevel).emoji;
+  const accessory = getAccessoryByLevel(growthLevel);
 
   return (
-    <div className="flex flex-col h-full relative">
-      {/* Top Global Navigation Container */}
-      <div className="pt-[54px] pb-0 px-0 bg-white sticky top-0 z-40 flex flex-col border-b border-zinc-100/80 shadow-[0_2px_10px_rgba(0,0,0,0.02)] shrink-0">
-        {/* Layer 1: Main Title Area */}
-        <div className="flex items-center justify-between px-3 h-10 w-full">
-          <div className="w-10 h-10 flex items-center justify-start">
-            <button className="text-zinc-900 p-1 active:bg-zinc-100 rounded-full transition-colors opacity-0 pointer-events-none">
-              <ChevronLeft size={28} strokeWidth={2.5} />
-            </button>
-          </div>
-          <div className="flex-1 flex justify-center items-center">
-            <span className="text-[18px] font-bold text-black tracking-wide">
+    <div className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-md border border-white/50 shadow-sm flex items-center justify-center shrink-0 text-lg relative">
+      <span>{emoji}</span>
+      {accessory && (
+        <span className="absolute -top-1 -right-1 text-[10px] leading-none drop-shadow-sm">
+          {accessory}
+        </span>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────
+// Subcomponent: Calendar Event Row
+// ─────────────────────────────────────────────────────
+function CalendarEventRow({ event }: { event: CalendarEvent; index: number }) {
+  const timeDisplay = event.time || "全天";
+
+  return (
+    <div className="flex items-center gap-1.5 text-[11px]">
+      <span className="text-orange-500 font-semibold whitespace-nowrap tabular-nums min-w-[10px]">
+        •
+      </span>
+      <span className="text-orange-500 font-semibold whitespace-nowrap tabular-nums min-w-[40px]">
+        {timeDisplay}
+      </span>
+      <span className="text-orange-800/90 truncate font-medium">
+        {event.title}
+      </span>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────
+// Main Component
+// ─────────────────────────────────────────────────────
+export function HomeView() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [showOriginal, setShowOriginal] = useState(false);
+  const [showBookmarks, setShowBookmarks] = useState(false);
+  const router = useRouter();
+
+  // ── AI Assistant state ──
+  const {
+    personalityId,
+    userPreferences,
+    growthLevel,
+  } = useAiAssistant();
+
+  // ── Window scroll listener ──
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setScrollTop(y);
+      setIsCollapsed(y >= 20);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setIsCollapsed(false);
+  }, []);
+
+  // Hydration-safe mounted guard
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  // ── Calendar store ──
+  const { pendingDraftCount, sourcesCount, mostUrgentTwo } = useCalendar();
+
+  // ── Computed values ──
+  const classTasks = useMemo(
+    () => mockTasks.filter((t) => t.sourceOrg === "我的班级"),
+    [],
+  );
+
+  const pendingClassCount = useMemo(
+    () => classTasks.filter((t) => t.status === "pending").length,
+    [classTasks],
+  );
+
+  // Generate daily summary via semantic rewriter
+  const dailySummary = useMemo((): RewriteResult => {
+    if (!mounted) return { rewritten: "", original: "", triggeredCircuitBreaker: false, criticalInfo: "" };
+    return generateDailySummary(classTasks, personalityId, userPreferences);
+  }, [mounted, classTasks, personalityId, userPreferences]);
+
+  const nextCountdown = useMemo(() => {
+    if (!mounted) return "";
+    if (mostUrgentTwo.length > 0) {
+      const first = mostUrgentTwo[0];
+      const d = normalizeDate(first.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const diff = Math.ceil((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+      const dateStr = diff === 0 ? "今天" : diff === 1 ? "明天" : `${diff}天后`;
+      return `${dateStr} · ${first.title}`;
+    }
+    return getNextEventCountdown();
+  }, [mounted, mostUrgentTwo]);
+
+  const todayStr = useMemo(
+    () =>
+      mounted
+        ? new Date().toLocaleDateString("zh-CN", {
+            month: "2-digit",
+            day: "2-digit",
+          })
+        : "",
+    [mounted],
+  );
+
+  const { favoritesCount, isFavorited, toggleFavorite } = useFavorites();
+  const { showToast } = useToast();
+
+  const handleToggleFavorite = useCallback(
+    (postId: string, e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const nowFavorited = toggleFavorite(postId);
+      showToast(nowFavorited ? "已存入收藏夹" : "已取消收藏");
+    },
+    [toggleFavorite, showToast],
+  );
+
+  // CSS keyframes for avatar float animation
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes avatarFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      @keyframes slide-up {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      .animate-slide-up {
+        animation: slide-up 0.3s ease-out;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  return (
+    <div className="flex flex-col min-h-screen relative">
+      {/* ═══════════════════════════════════════════════════════════════
+          Sticky Header
+          ═══════════════════════════════════════════════════════════════ */}
+      <div
+        className={`sticky top-0 z-40 bg-white pt-4 shrink-0 flex flex-col ${
+          isCollapsed ? "collapsed" : ""
+        }`}
+      >
+        {/* ── Tab Bar ── */}
+        <div className="border-b border-zinc-100/80 z-10 bg-white">
+          <div className="flex items-center justify-center space-x-12 px-3 h-[44px]">
+            <span className="text-[15px] text-zinc-400 font-medium">关注</span>
+            <span className="text-[15px] text-zinc-400 font-medium">推荐</span>
+            <span className="text-[17px] font-bold text-zinc-800 relative">
               我的学校
+              <div className="absolute bottom-[-8px] left-1/2 -translate-x-1/2 w-[24px] h-[3px] bg-blue-500 rounded-full" />
             </span>
           </div>
-          <div className="w-10 h-10 flex items-center justify-end">
-            <button className="text-zinc-900 p-1 active:bg-zinc-100 rounded-full transition-colors">
-              <Plus size={26} strokeWidth={2.5} />
-            </button>
-          </div>
         </div>
 
-        {/* Layer 2: Sub Tabs */}
-        <div className="flex justify-center items-center space-x-12 mt-1 relative w-full">
-          <button
-            onClick={() => setActiveSchoolTab("orgs")}
-            className={`text-[15px] pb-2 transition-colors relative font-medium cursor-pointer ${
-              activeSchoolTab === "orgs"
-                ? "text-blue-500 font-bold"
-                : "text-zinc-500"
-            }`}
-          >
-            我的组织
-            {activeSchoolTab === "orgs" && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[24px] h-[3px] bg-blue-500 rounded-full" />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveSchoolTab("feed")}
-            className={`text-[15px] pb-2 transition-colors relative font-medium cursor-pointer ${
-              activeSchoolTab === "feed"
-                ? "text-blue-500 font-bold"
-                : "text-zinc-500"
-            }`}
-          >
-            校园动态
-            {activeSchoolTab === "feed" && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[24px] h-[3px] bg-blue-500 rounded-full" />
-            )}
-          </button>
+        {/* ── 2×2 Service Grid ── */}
+        <div
+          className="transition-all duration-300 ease-in-out border-b border-slate-100 overflow-hidden"
+          style={{
+            maxHeight: isCollapsed ? "0px" : "500px",
+            margin: isCollapsed ? 0 : undefined,
+            opacity: isCollapsed ? 0 : 1,
+            pointerEvents: isCollapsed ? "none" : "auto",
+          }}
+          aria-hidden={isCollapsed}
+        >
+          <div className="grid grid-cols-2 gap-3 px-3 py-3">
+            {/* ═══════════════════════════════════════════════════════
+                [我的班级] → 养成系看板 (1/4 cell)
+                ═══════════════════════════════════════════════════════ */}
+            <div
+              className="rounded-2xl border border-white/40 p-3.5 flex flex-col gap-2 shadow-sm relative overflow-hidden cursor-pointer select-none active:scale-[0.98] transition-transform"
+              style={{
+                background: `linear-gradient(135deg, var(--card-from, #eff6ff), var(--card-to, #e0e7ff))`,
+              }}
+              onClick={() => {
+                window.location.href = "/student";
+              }}
+            >
+              {/* Glass morphism overlay */}
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl pointer-events-none" />
+
+              {/* Micro avatar (32px) top-left + Title */}
+              <div className="flex items-center gap-2 relative z-10">
+                <MicroAvatar growthLevel={growthLevel} />
+                <span className="text-[14px] font-bold text-zinc-700">
+                  我的班级
+                </span>
+              </div>
+
+              {/* Single-line summary */}
+              <p className="text-sm text-zinc-700 leading-tight line-clamp-1 relative z-10 flex-1 min-w-0">
+                {mounted ? dailySummary.rewritten : "加载中..."}
+              </p>
+
+              {/* Bottom bar: Task count only */}
+              <div className="flex items-center justify-between relative z-10 pt-1 border-t border-white/30">
+                <span className="text-[11px] font-medium text-zinc-500">
+                  {mounted
+                    ? pendingClassCount > 0
+                      ? `${pendingClassCount} 项待办`
+                      : "暂无待办"
+                    : "..."}
+                </span>
+              </div>
+            </div>
+
+            {/* 校历 — connected to calendarStore, shows TWO events */}
+            <Link
+              href="/calendar"
+              className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border border-orange-100/60 p-3.5 flex flex-col gap-1.5 shadow-sm cursor-pointer select-none active:scale-[0.98] transition-transform block no-underline"
+            >
+              <div className="flex items-center gap-1.5">
+                <span className="text-[14px] font-bold text-orange-900">日历</span>
+              </div>
+
+              {/* Two-event list: <time> <title> format */}
+              {mounted && mostUrgentTwo.length > 0 ? (
+                <div className="flex flex-col gap-1">
+                  {mostUrgentTwo.slice(0, 2).map((evt, idx) => (
+                    <CalendarEventRow key={evt.id} event={evt} index={idx} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[12px] text-orange-600/70 leading-tight">
+                  {mounted ? "暂无已确认日程" : "加载中..."}
+                </p>
+              )}
+
+            </Link>
+
+            {/* 情报与悬赏 */}
+            <Link
+              href="/request-center"
+              className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100/60 p-3.5 flex flex-col gap-1 shadow-sm cursor-pointer select-none active:scale-[0.98] transition-transform block no-underline"
+            >
+              <div className="flex items-center gap-1.5">
+                <Megaphone size={16} className="text-emerald-500" strokeWidth={2} />
+                <span className="text-[14px] font-bold text-emerald-900">情报与悬赏</span>
+              </div>
+              <span className="text-[12px] text-emerald-600/70">
+                悬赏互助 · 评价避雷
+              </span>
+            </Link>
+
+            {/* 收藏夹 */}
+            <div
+              onClick={() => setShowBookmarks(true)}
+              className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl border border-pink-100/60 p-3.5 flex flex-col gap-1 shadow-sm cursor-pointer select-none active:scale-[0.98] transition-transform"
+            >
+              <div className="flex items-center gap-1.5">
+                <Star size={16} className="text-pink-500" fill="currentColor" />
+                <span className="text-[14px] font-bold text-pink-900">收藏夹</span>
+              </div>
+              <span className="text-[12px] text-pink-600/70">
+                {favoritesCount > 0 ? `${favoritesCount} 条内容` : "暂无收藏"}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Scrollable Content Container */}
-      <div className="flex-1 overflow-hidden relative bg-[#f6f7f9] w-full">
-        <div
-          className="flex w-[200%] h-full transition-transform duration-300 ease-in-out"
-          style={{
-            transform: `translateX(${activeSchoolTab === "orgs" ? "0%" : "-50%"})`,
-          }}
-        >
-          {/* Left Page: Organizations (List Mode) */}
-          <div className="w-1/2 h-full overflow-y-auto px-3 pt-3 pb-[100px] hide-scrollbar space-y-2.5">
-            {/* AI 全局调度中心卡片 */}
-            <div
-              className="bg-blue-50 border border-blue-100 rounded-[20px] p-4 shadow-sm relative overflow-hidden flex flex-col gap-2 cursor-pointer transition-all active:scale-[0.98]"
-              onClick={() => setIsGlobalAiExpanded(!isGlobalAiExpanded)}
-            >
-              <div className="flex items-center gap-2 z-10 w-full">
-                <Sparkles size={18} className="text-blue-500 shrink-0" />
-                <span className="text-[14px] font-bold text-blue-900 truncate">
-                  {isGlobalAiExpanded ? "AI 统筹" : "AI 统筹：今日 2 项紧急待办未结"}
-                </span>
-              </div>
-              {isGlobalAiExpanded && (
-                <div className="text-[13px] text-blue-800/80 leading-relaxed z-10 font-medium mt-1">
-                  今天你有 <span className="text-blue-900 font-bold">2</span> 项跨组织的紧急待办。<br/>
-                  班级：<span className="text-blue-900 font-bold">期中论文定稿</span> (剩 5 小时)<br/>
-                  院学生会：<span className="text-blue-900 font-bold">策划案初稿</span> (剩 1 天)
-                </div>
-              )}
-            </div>
+      {/* ═══════════════════════════════════════════════════════════════
+          BookmarkView Overlay Panel
+          ═══════════════════════════════════════════════════════════════ */}
+      {showBookmarks && (
+        <BookmarkOverlay onClose={() => setShowBookmarks(false)} />
+      )}
 
-            {orgList.map((org) => (
-              <Link
-                href={org.name === "我的班级" ? "/student" : "#"}
-                key={org.id}
-                  onClick={(e) => {
-                   if (org.name === "我的班级") {
-                     // Follow link to /student
-                     setCurrentOrgRole("admin");
-                     return;
-                   }
-                  e.preventDefault();
-                  setCurrentOrgName(org.name);
-                  setCurrentOrgRole(org.role as OrgRole);
-                  setView("class");
-                  router.push("#class");
-                }}
-                className="flex items-center bg-white p-3.5 rounded-[20px] active:scale-[0.98] transition-all cursor-pointer select-none shadow-sm relative"
+      {/* ═══════════════════════════════════════════════════════════════
+          Feed Stream
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="px-3 pt-3 pb-[100px] space-y-3 bg-[#f6f7f9] flex-1">
+        {/* AI 智库周报 */}
+        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-[18px] p-4 shadow-sm border border-purple-100/50">
+          <div className="flex items-center gap-1.5 mb-2.5">
+            <Bot size={15} className="text-purple-500" />
+            <span className="text-[14px] font-bold text-purple-900">
+              AI 智库周报
+            </span>
+          </div>
+          <div className="space-y-1.5">
+            {dailyBriefings.map((briefing, idx) => (
+              <div
+                key={idx}
+                className="flex items-start gap-2 text-[12.5px] leading-relaxed"
               >
-                {/* Left Avatar */}
-                <div
-                  className={`w-[48px] h-[48px] bg-gradient-to-br ${org.colors} rounded-[16px] flex items-center justify-center shrink-0 shadow-inner overflow-hidden relative`}
+                <span
+                  className={`shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    briefing.tag === "避雷"
+                      ? "bg-red-100 text-red-600"
+                      : briefing.tag === "预警"
+                        ? "bg-amber-100 text-amber-600"
+                        : "bg-emerald-100 text-emerald-600"
+                  }`}
                 >
-                  <org.icon
-                    fill={org.id === "1" ? "currentColor" : "none"}
-                    className={`text-white/20 w-7 h-7 absolute ${org.id === "1" ? "block" : "hidden"}`}
-                  />
-                  <org.icon className="text-white w-6 h-6 stroke-[2] relative z-10" />
-                </div>
-
-                {/* Center Content */}
-                <div className="flex-1 ml-3.5 min-w-0 pr-[4.5rem]">
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <div className="font-bold text-[16px] text-zinc-900 truncate tracking-tight">
-                      {org.name}
-                    </div>
-                  </div>
-                  <div className="text-[13px] text-zinc-500 mt-0.5 truncate">
-                    {org.id === "1" ? (
-                      <span className="text-[#f54f46] font-medium shrink-0">
-                        🔴{" "}
-                        {org.role === "admin"
-                          ? "3人未交：毕业论文定稿..."
-                          : "2项高优待办：毕业论文定稿..."}
-                      </span>
-                    ) : (
-                      org.summary
-                    )}
-                  </div>
-                </div>
-
-                {/* Right Metadata */}
-                <div className="flex flex-col items-end shrink-0 pl-1 self-stretch pt-0.5 justify-between absolute right-3.5 top-3.5 bottom-3.5">
-                  <span className="text-zinc-400 text-[11px] font-medium">
-                    {org.time}
-                  </span>
-
-                  <div className="flex flex-col items-end gap-1">
-                    {org.role === "admin" ? (
-                      <div className="px-1.5 py-0.5 rounded bg-blue-500 text-white text-[10px] font-bold">
-                        管理员
-                      </div>
-                    ) : (
-                      <div className="px-1.5 py-0.5 rounded bg-[#ebedf0] text-[#555] text-[10px] font-bold">
-                        成员
-                      </div>
-                    )}
-
-                    {org.unread > 0 && (
-                      <div className="min-w-[18px] h-[18px] bg-[#f54f46] text-white text-[11px] font-bold rounded-full flex items-center justify-center px-1.5 shadow-[0_2px_6px_rgba(245,79,70,0.3)] mt-0.5">
-                        {org.unread}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Link>
+                  [{briefing.tag}]
+                </span>
+                <span className="text-zinc-700">{briefing.text}</span>
+              </div>
             ))}
           </div>
+        </div>
 
-          {/* Right Page: Feed (Waterfall Mode) */}
-          <div className="w-1/2 h-full overflow-y-auto px-3 pt-3 pb-[100px] hide-scrollbar space-y-3">
-            {/* AI Hot Topics Box */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-[18px] p-4 shadow-sm border border-blue-100/50 overflow-hidden">
-              <div className="flex items-center gap-1.5 mb-2.5">
-                <Sparkles size={16} className="text-blue-500" />
-                <span className="text-[14px] font-bold text-blue-900">
-                  AI 校园热搜
-                </span>
+        {/* 校园热搜 */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-[18px] p-4 shadow-sm border border-blue-100/50 overflow-hidden">
+          <div className="flex items-center gap-1.5 mb-2.5">
+            <span className="text-[14px] font-bold text-blue-900">
+              校园热搜
+            </span>
+          </div>
+          <div className="h-[28px] overflow-hidden relative">
+            <div className="flex flex-col gap-2 text-[12.5px] text-blue-600 font-medium animate-scroll">
+              <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                #民法典讲座 提前排队
               </div>
-              <div className="h-[28px] overflow-hidden relative">
-                <div className="flex flex-col gap-2 text-[12.5px] text-blue-600 font-medium animate-scroll">
-                  <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                    #民法典讲座 提前排队
-                  </div>
-                  <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                    #二食堂炸鸡 恢复营业啦！
-                  </div>
-                  <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                    #英语四级报名 还有最后2天
-                  </div>
-                  {/* Duplicate for smooth scroll */}
-                  <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                    #民法典讲座 提前排队
-                  </div>
-                  <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                    #二食堂炸鸡 恢复营业啦！
-                  </div>
-                  <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                    #英语四级报名 还有最后2天
-                  </div>
-                </div>
+              <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                #二食堂炸鸡 恢复营业啦！
               </div>
-            </div>
-
-            {/* Feed Item 1 */}
-            <div
-              onClick={() => alert("进入帖子详情")}
-              className="bg-white rounded-[20px] p-4 flex flex-col gap-2 shadow-sm active:scale-95 transition-transform cursor-pointer"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-6 h-6 rounded-full bg-zinc-200"></div>
-                <span className="text-[12px] text-zinc-500 font-medium">
-                  吃货小分队
-                </span>
+              <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                #英语四级报名 还有最后2天
               </div>
-
-              <div className="text-[14px] font-medium text-zinc-800 line-clamp-2 leading-relaxed">
-                谁知道二食堂那家炸鸡什么时候恢复营业啊？等好几天了，真的很想吃😭
+              <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                #民法典讲座 提前排队
               </div>
-              <div className="flex items-center justify-between text-zinc-400 mt-2">
-                <span className="text-[11px]">10分钟前</span>
-                <div className="flex items-center gap-2.5">
-                  <MessageCircle size={16} />
-                  <span className="text-[11px]">12</span>
-                </div>
+              <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                #二食堂炸鸡 恢复营业啦！
               </div>
-              <div
-                className="mt-2 text-blue-500 bg-blue-50/80 px-3 py-2 rounded-xl text-[12px] flex items-center gap-1.5 active:bg-blue-100/80 transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  alert("AI 摘要：发帖人正在询问二食堂炸鸡店的恢复营业时间，已有12人参与讨论。");
-                }}
-              >
-                <Bot size={14} />
-                <span className="font-bold">AI 摘要</span>
-              </div>
-            </div>
-
-            {/* Feed Item 2 */}
-            <div
-              onClick={() => alert("进入帖子详情")}
-              className="bg-white rounded-[20px] p-4 flex flex-col gap-2 shadow-sm active:scale-95 transition-transform cursor-pointer"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-6 h-6 rounded-full bg-zinc-200"></div>
-                <span className="text-[12px] text-zinc-500 font-medium">
-                  法学院小透明
-                </span>
-              </div>
-
-              <div className="text-[14px] font-medium text-zinc-800 line-clamp-2 leading-relaxed">
-                这周四下午的民法典讲座有人去吗？我占座多一个位置，先到先得~
-              </div>
-              <div className="w-full h-[120px] bg-zinc-100 rounded-xl overflow-hidden flex items-center justify-center mt-1">
-                <ImageIcon size={28} className="text-zinc-300" />
-              </div>
-              <div className="flex items-center justify-between text-zinc-400 mt-2">
-                <span className="text-[11px]">45分钟前</span>
-                <div className="flex items-center gap-2.5">
-                  <MessageCircle size={16} />
-                  <span className="text-[11px]">34</span>
-                </div>
-              </div>
-              <div
-                className="mt-2 text-blue-500 bg-blue-50/80 px-3 py-2 rounded-xl text-[12px] flex items-center gap-1.5 active:bg-blue-100/80 transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  alert("AI 摘要：发帖人提供一个周四下午民法典讲座的占位，目前已有34人留言。");
-                }}
-              >
-                <Bot size={14} />
-                <span className="font-bold">AI 摘要</span>
+              <div className="bg-white/80 px-3 py-1.5 rounded-lg truncate shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                #英语四级报名 还有最后2天
               </div>
             </div>
           </div>
         </div>
+
+        {/* Feed Items */}
+        {mockPosts.map((post) => (
+          <Link
+            key={post.id}
+            href={`/post/${post.id}`}
+            className="bg-white rounded-[20px] p-4 flex flex-col gap-2 shadow-sm active:scale-[0.98] transition-transform cursor-pointer select-none block"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-6 h-6 rounded-full bg-zinc-200 flex items-center justify-center overflow-hidden shrink-0">
+                <img
+                  src={post.author.avatar}
+                  alt={post.author.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="text-[12px] text-zinc-500 font-medium">
+                {post.author.name}
+              </span>
+            </div>
+            <div className="text-[14px] font-medium text-zinc-800 line-clamp-2 leading-relaxed">
+              {post.content}
+            </div>
+            {post.image && (
+              <div className="w-full rounded-xl overflow-hidden mt-1 aspect-video">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div className="flex items-center justify-between text-zinc-400 mt-2">
+              <span className="text-[11px]">{post.createdAt}</span>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={(e) => handleToggleFavorite(post.id, e)}
+                  className="flex items-center active:scale-95 transition-transform"
+                  aria-label={isFavorited(post.id) ? "取消收藏" : "收藏"}
+                >
+                  <Star
+                    size={16}
+                    className={
+                      isFavorited(post.id)
+                        ? "fill-[#FFD700] text-[#FFD700] transition-colors"
+                        : "text-zinc-400 transition-colors"
+                    }
+                  />
+                </button>
+                <div className="flex items-center gap-2.5">
+                  <MessageCircle size={16} />
+                  <span className="text-[11px]">{post.comments.length}</span>
+                </div>
+              </div>
+            </div>
+            <div
+              className="mt-2 text-blue-500 bg-blue-50/80 px-3 py-2 rounded-xl text-[12px] flex items-center gap-1.5 active:bg-blue-100/80 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                alert(
+                  `摘要：${post.content.slice(0, 30)}...，已有${post.comments.length}人参与讨论。`,
+                );
+              }}
+            >
+              <Bot size={14} />
+              <span className="font-bold">摘要</span>
+            </div>
+          </Link>
+        ))}
       </div>
 
-      {/* Bottom Global Navigation */}
-      <div className="absolute bottom-0 inset-x-0 h-[88px] bg-white/95 backdrop-blur-xl border-t border-zinc-200/60 flex justify-around items-start pt-[14px] px-2 z-40 shrink-0 select-none">
-        <button className="flex flex-col items-center gap-1.5 w-[70px] text-zinc-400">
-          <MessageCircle size={24} strokeWidth={2.5} className="mb-0.5" />
+      {/* ═══════════════════════════════════════════════════════════════
+          Back to Top Button
+          ═══════════════════════════════════════════════════════════════ */}
+      <button
+        className={`fixed bottom-[calc(80px+env(safe-area-inset-bottom,0px))] left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur rounded-full p-2.5 text-zinc-500 z-50 shadow-md border border-zinc-200 transition-all duration-200 ${
+          isCollapsed && scrollTop > 200
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 translate-y-5 pointer-events-none"
+        }`}
+        onClick={scrollToTop}
+        aria-label="回到顶部"
+      >
+        <ChevronUp size={20} />
+      </button>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          Bottom Global Navigation (Tab Bar)
+          ═══════════════════════════════════════════════════════════════ */}
+      <div
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] z-[100] bg-white/90 backdrop-blur-lg border-t border-zinc-200 flex justify-around items-start pt-[10px] pb-[env(safe-area-inset-bottom,0px)] px-2 select-none"
+        style={{ minHeight: "calc(72px + env(safe-area-inset-bottom, 0px))" }}
+      >
+        <button className="flex flex-col items-center gap-1 w-[70px] text-zinc-400">
+          <MessageCircle size={24} strokeWidth={2} />
           <span className="text-[11px] font-bold">消息</span>
         </button>
-        <button className="flex flex-col items-center gap-1.5 w-[70px] text-blue-500">
+        <button className="flex flex-col items-center gap-1 w-[70px] text-blue-500">
           <div className="relative">
-            <Hash size={24} strokeWidth={3} className="mb-0.5" />
-            <div className="absolute -top-1 -right-1 w-[9px] h-[9px] bg-[#f54f46] rounded-full border-[1.5px] border-white"></div>
+            <Hash size={24} strokeWidth={2.5} />
+            <div className="absolute -top-1 -right-1 w-[9px] h-[9px] bg-[#f54f46] rounded-full border-[1.5px] border-white" />
           </div>
           <span className="text-[11px] font-bold">频道</span>
         </button>
-        <button className="flex flex-col items-center gap-1.5 w-[70px] text-zinc-400">
-          <Users size={24} strokeWidth={2.5} className="mb-0.5" />
+        <button className="flex flex-col items-center gap-1 w-[70px] text-zinc-400">
+          <Users size={24} strokeWidth={2} />
           <span className="text-[11px] font-bold">联系人</span>
         </button>
-        <button className="flex flex-col items-center gap-1.5 w-[70px] text-zinc-400">
-          <Compass size={24} strokeWidth={2.5} className="mb-0.5" />
+        <button className="flex flex-col items-center gap-1 w-[70px] text-zinc-400">
+          <Compass size={24} strokeWidth={2} />
           <span className="text-[11px] font-bold">动态</span>
         </button>
       </div>

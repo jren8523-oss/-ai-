@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef, useCallback, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft,
   Upload,
@@ -21,63 +21,109 @@ import {
   ClipboardPaste,
   Pencil,
   Trash2,
-} from "lucide-react";
-import { useCalendar, type SourceMaterial, type DraftAgendaItem, mockParsing, normalizeDate } from "@/src/store/calendarStore";
-import Link from "next/link";
+} from 'lucide-react'
+import { useCalendar, type SourceMaterial, type DraftAgendaItem, mockParsing, normalizeDate } from '@/store/calendarStore'
+import { useToast } from '@/components/Toast'
+import Link from 'next/link'
 
 // ══════════════════════════════════════════════════════════
 // Design Tokens — QQ Channel inspired light theme
 // ══════════════════════════════════════════════════════════
 const COLORS = {
-  bg: "#f6f7f9",
-  card: "#ffffff",
-  text: "#1e293b",
-  textSecondary: "#64748b",
-  textMuted: "#94a3b8",
-  accent: "#4f46e5",
-  accentLight: "#eef2ff",
-  accentBorder: "#c7d2fe",
-  success: "#22c55e",
-  warning: "#f59e0b",
-  danger: "#ef4444",
-  border: "#e2e8f0",
-  skeleton: "#f1f5f9",
-};
+  bg: '#f6f7f9',
+  card: '#ffffff',
+  text: '#1e293b',
+  textSecondary: '#64748b',
+  textMuted: '#94a3b8',
+  accent: '#4f46e5',
+  accentLight: '#eef2ff',
+  accentBorder: '#c7d2fe',
+  success: '#22c55e',
+  warning: '#f59e0b',
+  danger: '#ef4444',
+  border: '#e2e8f0',
+  skeleton: '#f1f5f9',
+}
 
-// ── 周历头部组件 ─────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// WeekHeader — 七天周历选择器（可联动）
+// ══════════════════════════════════════════════════════════
 function WeekHeader({
   events,
+  selectedDay,
+  onSelectDay,
+  weekOffset,
+  onWeekOffsetChange,
 }: {
-  events: { date: string; title: string; time?: string }[];
+  events: { date: string; title: string; time?: string }[]
+  selectedDay: Date
+  onSelectDay: (d: Date) => void
+  weekOffset: number
+  onWeekOffsetChange: (offset: number) => void
 }) {
-  const today = new Date();
-  const weekDays: { label: string; date: Date; isToday: boolean }[] = [];
-  const dayOfWeek = today.getDay();
-  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-  const monday = new Date(today);
-  monday.setDate(today.getDate() + mondayOffset);
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
 
+  // 基于 weekOffset 计算本周的周一
+  const weekMonday = (() => {
+    const now = new Date()
+    const dayOfWeek = now.getDay()
+    const offsetToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+    const monday = new Date(now)
+    monday.setDate(now.getDate() + offsetToMonday + weekOffset * 7)
+    monday.setHours(0, 0, 0, 0)
+    return monday
+  })()
+
+  const weekDays: { label: string; date: Date; isToday: boolean }[] = []
   for (let i = 0; i < 7; i++) {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
+    const d = new Date(weekMonday)
+    d.setDate(weekMonday.getDate() + i)
     const isToday =
       d.getDate() === today.getDate() &&
       d.getMonth() === today.getMonth() &&
-      d.getFullYear() === today.getFullYear();
-    const dayLabels = ["一", "二", "三", "四", "五", "六", "日"];
-    weekDays.push({ label: dayLabels[i], date: d, isToday });
+      d.getFullYear() === today.getFullYear()
+    const dayLabels = ['一', '二', '三', '四', '五', '六', '日']
+    weekDays.push({ label: dayLabels[i], date: d, isToday })
   }
+
+  // 年月份标签
+  const yearMonthLabel = `${weekMonday.getFullYear()}年${weekMonday.getMonth() + 1}月`
 
   function getEventsForDate(d: Date): { title: string; time?: string }[] {
     return events.filter((e) => {
-      const norm = normalizeDate(e.date);
+      const norm = normalizeDate(e.date)
       return (
         norm.getDate() === d.getDate() &&
         norm.getMonth() === d.getMonth() &&
         norm.getFullYear() === d.getFullYear()
-      );
-    });
+      )
+    })
   }
+
+  const dayEvents = getEventsForDate(selectedDay)
+
+  // 日期选择器快速跳转
+  const handleDatePickerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value // YYYY-MM-DD
+    if (!val) return
+    const parts = val.split('-')
+    const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
+    onSelectDay(d)
+    // 计算该日期离今天对应的周一差多少周
+    const now = new Date()
+    const nowDayOfWeek = now.getDay()
+    const nowOffsetToMonday = nowDayOfWeek === 0 ? -6 : 1 - nowDayOfWeek
+    const nowMonday = new Date(now)
+    nowMonday.setDate(now.getDate() + nowOffsetToMonday)
+    nowMonday.setHours(0, 0, 0, 0)
+    const diffMs = d.getTime() - nowMonday.getTime()
+    const diffWeeks = Math.round(diffMs / (7 * 24 * 60 * 60 * 1000))
+    onWeekOffsetChange(diffWeeks)
+  }
+
+  // 统计已确认项数
+  const totalConfirmed = events.length
 
   return (
     <motion.div
@@ -86,99 +132,126 @@ function WeekHeader({
       transition={{ duration: 0.35 }}
       className="bg-white rounded-[20px] p-4 shadow-sm border border-[#e8ecf1]"
     >
-      {/* 月份标签 */}
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-[13px] font-semibold text-[#1e293b] tracking-wide">
-          {today.getFullYear()}年{today.getMonth() + 1}月 · 周历
-        </h3>
-        <span className="text-[10px] text-[#94a3b8] bg-[#f8fafc] px-2 py-0.5 rounded-full">
-          已确认 {events.length} 项
-        </span>
+      {/* 月份标签 + 导航箭头 + 日期选择器 */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => onWeekOffsetChange(weekOffset - 1)}
+            className="w-7 h-7 rounded-full flex items-center justify-center bg-[#f3f4f6] text-[#64748b] hover:bg-[#eef2ff] hover:text-[#4f46e5] transition-colors"
+            aria-label="上一周"
+          >
+            <ChevronLeft size={14} />
+          </button>
+          <h3 className="text-[13px] font-semibold text-[#1e293b] tracking-wide min-w-[90px] text-center select-none">
+            {yearMonthLabel}
+          </h3>
+          <button
+            onClick={() => onWeekOffsetChange(weekOffset + 1)}
+            className="w-7 h-7 rounded-full flex items-center justify-center bg-[#f3f4f6] text-[#64748b] hover:bg-[#eef2ff] hover:text-[#4f46e5] transition-colors"
+            aria-label="下一周"
+          >
+            <ChevronRight size={14} />
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* 原生日期选择器 */}
+          <input
+            type="date"
+            onChange={handleDatePickerChange}
+            className="text-[10px] text-[#64748b] bg-[#f8fafc] border border-[#e2e8f0] rounded-lg px-2 py-1 outline-none focus:border-[#4f46e5] cursor-pointer"
+            aria-label="快速跳转日期"
+          />
+          <span className="text-[10px] text-[#94a3b8] bg-[#f8fafc] px-2 py-0.5 rounded-full">
+            已确认 {totalConfirmed} 项
+          </span>
+        </div>
       </div>
 
-      {/* 横向滚动的周历条 */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+      {/* 横向周历条 — 七天选择器 */}
+      <div className="flex gap-1.5 pb-1">
         {weekDays.map((wd, i) => {
-          const dayEvents = getEventsForDate(wd.date);
-          const hasEvents = dayEvents.length > 0;
+          const hasEvents = getEventsForDate(wd.date).length > 0
+          const isSelected =
+            selectedDay.getDate() === wd.date.getDate() &&
+            selectedDay.getMonth() === wd.date.getMonth() &&
+            selectedDay.getFullYear() === wd.date.getFullYear()
           return (
-            <div
+            <button
               key={i}
-              className={`flex-shrink-0 w-[60px] rounded-xl py-2.5 px-1 text-center transition-all ${
-                wd.isToday
-                  ? "bg-[#4f46e5] text-white shadow-md shadow-[#4f46e5]/20"
+              onClick={() => onSelectDay(wd.date)}
+              className={`flex-1 rounded-xl py-2.5 px-1 text-center transition-all cursor-pointer border-none outline-none font-inherit ${
+                isSelected
+                  ? 'bg-[#4f46e5] text-white shadow-md shadow-[#4f46e5]/20'
+                  : wd.isToday
+                  ? 'bg-[#eef2ff] text-[#4f46e5]'
                   : hasEvents
-                  ? "bg-[#eef2ff] text-[#4f46e5]"
-                  : "bg-[#f8fafc] text-[#94a3b8]"
+                  ? 'bg-[#f8fafc] text-[#1e293b]'
+                  : 'bg-[#f8fafc] text-[#94a3b8]'
               }`}
             >
               <div className="text-[10px] opacity-70 mb-0.5">{wd.label}</div>
               <div className="text-[15px] font-semibold">{wd.date.getDate()}</div>
               {hasEvents && (
                 <div className="flex justify-center gap-0.5 mt-1">
-                  {dayEvents.slice(0, 3).map((_, ei) => (
+                  {getEventsForDate(wd.date).slice(0, 3).map((_, ei) => (
                     <div
                       key={ei}
                       className={`w-1 h-1 rounded-full ${
-                        wd.isToday ? "bg-white" : "bg-[#4f46e5]"
+                        isSelected ? 'bg-white' : 'bg-[#4f46e5]'
                       }`}
                     />
                   ))}
                 </div>
               )}
-            </div>
-          );
+            </button>
+          )
         })}
       </div>
 
-      {/* 今日日程速览 */}
+      {/* 选中日期的日程速览 */}
       <div className="mt-3 pt-3 border-t border-[#f1f5f9]">
         <AnimatePresence mode="wait">
-          {(() => {
-            const todayEvents = getEventsForDate(today);
-            if (todayEvents.length === 0) {
-              return (
-                <motion.p
-                  key="empty"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-[12px] text-[#94a3b8] text-center py-2"
+          {dayEvents.length === 0 ? (
+            <motion.p
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-[12px] text-[#94a3b8] text-center py-2"
+            >
+              {selectedDay.getTime() === today.getTime()
+                ? '今日暂无已确认日程'
+                : `${selectedDay.getMonth() + 1}月${selectedDay.getDate()}日暂无已确认日程`}
+            </motion.p>
+          ) : (
+            <motion.div
+              key="list"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-1.5"
+            >
+              {dayEvents.map((ev, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.08 }}
+                  className="flex items-center gap-2 text-[12px]"
                 >
-                  今日暂无已确认日程
-                </motion.p>
-              );
-            }
-            return (
-              <motion.div
-                key="list"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="space-y-1.5"
-              >
-                {todayEvents.map((ev, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.08 }}
-                    className="flex items-center gap-2 text-[12px]"
-                  >
-                    <div className="w-1 h-4 rounded-full bg-[#4f46e5] flex-shrink-0" />
-                    <span className="text-[#4f46e5] font-medium text-[11px] tabular-nums flex-shrink-0">
-                      {ev.time || "全天"}
-                    </span>
-                    <span className="text-[#1e293b] truncate">{ev.title}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
-            );
-          })()}
+                  <div className="w-1 h-4 rounded-full bg-[#4f46e5] flex-shrink-0" />
+                  <span className="text-[#4f46e5] font-medium text-[11px] tabular-nums flex-shrink-0">
+                    {ev.time || '全天'}
+                  </span>
+                  <span className="text-[#1e293b] truncate">{ev.title}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </motion.div>
-  );
+  )
 }
 
 // ── 已确认事件卡片 ────────────────────────────────────────
@@ -188,10 +261,10 @@ function ConfirmedEventCard({
   onEdit,
   onDelete,
 }: {
-  event: { id: string; date: string; time?: string; title: string; location?: string };
-  index: number;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
+  event: { id: string; date: string; time?: string; title: string; location?: string }
+  index: number
+  onEdit?: (id: string) => void
+  onDelete?: (id: string) => void
 }) {
   return (
     <motion.div
@@ -208,8 +281,8 @@ function ConfirmedEventCard({
           {event.title}
         </p>
         <p className="text-[11px] text-[#94a3b8] mt-0.5">
-          {event.time ? `${event.time}  ` : ""}{event.date}
-          {event.location ? ` · ${event.location}` : ""}
+          {event.time ? `${event.time}  ` : ''}{event.date}
+          {event.location ? ` · ${event.location}` : ''}
         </p>
       </div>
       {/* Edit & Delete icons */}
@@ -217,8 +290,8 @@ function ConfirmedEventCard({
         {onEdit && (
           <button
             onClick={(e) => {
-              e.stopPropagation();
-              onEdit(event.id);
+              e.stopPropagation()
+              onEdit(event.id)
             }}
             className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#4f46e5] hover:bg-[#eef2ff] transition-colors"
             aria-label="编辑日程"
@@ -229,8 +302,8 @@ function ConfirmedEventCard({
         {onDelete && (
           <button
             onClick={(e) => {
-              e.stopPropagation();
-              onDelete(event.id);
+              e.stopPropagation()
+              onDelete(event.id)
             }}
             className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#ef4444] hover:bg-[#fef2f2] transition-colors"
             aria-label="删除日程"
@@ -243,7 +316,7 @@ function ConfirmedEventCard({
         已确认
       </span>
     </motion.div>
-  );
+  )
 }
 
 // ── 草稿卡片（待确认） ──────────────────────────────────────
@@ -252,14 +325,14 @@ function DraftCard({
   onConfirm,
   onDiscard,
 }: {
-  draft: DraftAgendaItem;
-  onConfirm: (id: string) => void;
-  onDiscard: (id: string) => void;
+  draft: DraftAgendaItem
+  onConfirm: (id: string) => void
+  onDiscard: (id: string) => void
 }) {
   return (
     <motion.div
       layout
-      exit={{ y: -40, opacity: 0, scale: 0.8, transition: { duration: 0.35, ease: "easeOut" } }}
+      exit={{ y: -40, opacity: 0, scale: 0.8, transition: { duration: 0.35, ease: 'easeOut' } }}
       className="bg-[#fffdf5] border border-[#fef3c7] rounded-xl p-3.5"
     >
       <div className="flex items-start gap-3">
@@ -305,7 +378,72 @@ function DraftCard({
         </motion.button>
       </div>
     </motion.div>
-  );
+  )
+}
+
+// ── AI 解析确认卡片 ───────────────────────────────────────
+function ParsedConfirmCard({
+  parsed,
+  onConfirm,
+  onCancel,
+}: {
+  parsed: { title: string; date: string; time: string; location: string; note: string }
+  onConfirm: () => void
+  onCancel: () => void
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -8, scale: 0.97 }}
+      transition={{ duration: 0.25 }}
+      className="bg-[#eef2ff] border border-[#c7d2fe] rounded-[14px] p-4 mt-3"
+    >
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <span className="text-[14px] font-semibold text-[#1e293b]">{parsed.title}</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-[#64748b]">
+          <span className="flex items-center gap-1">
+            <CalendarIcon size={12} />
+            {parsed.date}
+          </span>
+          {parsed.time && (
+            <span className="flex items-center gap-1">
+              <Clock size={12} />
+              {parsed.time}
+            </span>
+          )}
+          {parsed.location && (
+            <span className="flex items-center gap-1">
+              <MapPin size={12} />
+              {parsed.location}
+            </span>
+          )}
+        </div>
+        {parsed.note && (
+          <p className="text-[11px] text-[#94a3b8] italic">{parsed.note}</p>
+        )}
+      </div>
+      <div className="flex items-center justify-end gap-2 mt-3 pt-2.5 border-t border-[#c7d2fe]/60">
+        <motion.button
+          whileTap={{ scale: 0.92 }}
+          onClick={onCancel}
+          className="px-3 py-1.5 text-[11px] rounded-lg text-[#64748b] hover:text-[#1e293b] hover:bg-[#f8fafc] transition-colors"
+        >
+          取消
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.92 }}
+          onClick={onConfirm}
+          className="flex items-center gap-1 px-4 py-1.5 text-[11px] rounded-lg bg-[#4f46e5] text-white hover:bg-[#4338ca] transition-colors shadow-sm shadow-[#4f46e5]/20"
+        >
+          <CheckCircle2 size={12} />
+          确认加入
+        </motion.button>
+      </div>
+    </motion.div>
+  )
 }
 
 // ══════════════════════════════════════════════════════════
@@ -324,129 +462,154 @@ export default function CalendarDetailView() {
     resetDraft,
     pendingDraftCount,
     sourcesCount,
-  } = useCalendar();
+  } = useCalendar()
+  const { showToast } = useToast()
 
-  const [dragOver, setDragOver] = useState(false);
-  const [pastedText, setPastedText] = useState("");
-  const [showPasteArea, setShowPasteArea] = useState(false);
-  const [sourceListExpanded, setSourceListExpanded] = useState(false);
+  const [dragOver, setDragOver] = useState(false)
+  const [pastedText, setPastedText] = useState('')
+  const [showPasteArea, setShowPasteArea] = useState(false)
+  const [sourceListExpanded, setSourceListExpanded] = useState(false)
 
-  // Section 2: Manual entry form (moved above 素材池)
-  const [showManualForm, setShowManualForm] = useState(false);
-  const [manualTitle, setManualTitle] = useState("");
-  const [manualTime, setManualTime] = useState("");
-  const [manualLocation, setManualLocation] = useState("");
-  const [manualDate, setManualDate] = useState("");
+  // WeekHeader 状态
+  const [selectedDay, setSelectedDay] = useState<Date>(() => {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    return d
+  })
+  const [weekOffset, setWeekOffset] = useState(0)
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const pasteRef = useRef<HTMLTextAreaElement>(null);
-  const manualFormRef = useRef<HTMLDivElement>(null);
+  // 自然语言输入状态
+  const [nlInput, setNlInput] = useState('')
+  const [isParsing, setIsParsing] = useState(false)
+  const [parsedResult, setParsedResult] = useState<{
+    title: string; date: string; time: string; location: string; note: string
+  } | null>(null)
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const pasteRef = useRef<HTMLTextAreaElement>(null)
 
   // ── Helpers ─────────────────────────────────────────
   const triggerParse = useCallback(
     (sources: SourceMaterial[]) => {
-      if (sources.length === 0) return;
-      startParsing();
+      if (sources.length === 0) return
+      startParsing()
       // Simulate AI processing delay
       setTimeout(() => {
-        const drafts = mockParsing(sources);
-        completeParsing(drafts);
-      }, 900);
+        const drafts = mockParsing(sources)
+        completeParsing(drafts)
+      }, 900)
     },
     [startParsing, completeParsing],
-  );
+  )
 
   const handleFiles = useCallback(
     (files: FileList) => {
-      const newSources: SourceMaterial[] = [];
+      const newSources: SourceMaterial[] = []
       Array.from(files).forEach((file) => {
-        const isImage = file.type.startsWith("image/");
+        const isImage = file.type.startsWith('image/')
         const source: SourceMaterial = {
           id: `src-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-          type: isImage ? "image" : "file",
+          type: isImage ? 'image' : 'file',
           name: file.name,
-          content: `[${isImage ? "图片" : "文件"}] ${file.name}`,
+          content: `[${isImage ? '图片' : '文件'}] ${file.name}`,
           uploadedAt: new Date().toISOString(),
-        };
-        addSource(source);
-        newSources.push(source);
-      });
-      triggerParse(newSources);
+        }
+        addSource(source)
+        newSources.push(source)
+      })
+      triggerParse(newSources)
     },
     [addSource, triggerParse],
-  );
+  )
 
   const handlePasteSubmit = useCallback(() => {
-    const text = pastedText.trim();
-    if (!text) return;
+    const text = pastedText.trim()
+    if (!text) return
     const source: SourceMaterial = {
       id: `src-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      type: "text",
-      name: "粘贴文本",
+      type: 'text',
+      name: '粘贴文本',
       content: text,
       uploadedAt: new Date().toISOString(),
-    };
-    addSource(source);
-    setPastedText("");
-    setShowPasteArea(false);
-    triggerParse([source]);
-  }, [pastedText, addSource, triggerParse]);
+    }
+    addSource(source)
+    setPastedText('')
+    setShowPasteArea(false)
+    triggerParse([source])
+  }, [pastedText, addSource, triggerParse])
 
-  const handleManualSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!manualTitle.trim() || !manualDate.trim() || !manualLocation.trim()) return;
+  // ── AI 自然语言解析 ────────────────────────────────
+  const handleAiParse = useCallback(async () => {
+    const text = nlInput.trim()
+    if (!text) return
+    setIsParsing(true)
+    setParsedResult(null)
+    try {
+      const res = await fetch('/api/parse-schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      })
+      const data = await res.json()
+      if (!res.ok || data.error) {
+        showToast(data.error || 'AI 解析失败，请重新描述')
+        setIsParsing(false)
+        return
+      }
+      setParsedResult(data)
+    } catch {
+      showToast('网络请求失败，请检查连接')
+    }
+    setIsParsing(false)
+  }, [nlInput, showToast])
 
-      // Directly create a draft item from manual entry (bypass OCR)
-      const draft: DraftAgendaItem = {
-        id: `draft-manual-${Date.now()}`,
-        title: manualTitle,
-        date: manualDate,
-        time: manualTime || undefined,
-        location: manualLocation,
-        sourceId: "",
-        confirmed: false,
-      };
-      completeParsing([draft]);
+  // ── 确认 AI 解析结果并写入日程 ──────────────────────
+  const handleConfirmParsed = useCallback(() => {
+    if (!parsedResult) return
+    const draft: DraftAgendaItem = {
+      id: `draft-ai-${Date.now()}`,
+      title: parsedResult.title,
+      date: parsedResult.date,
+      time: parsedResult.time || undefined,
+      location: parsedResult.location || undefined,
+      sourceId: '',
+      confirmed: false,
+    }
+    completeParsing([draft])
+    setNlInput('')
+    setParsedResult(null)
+  }, [parsedResult, completeParsing])
 
-      // Reset form
-      setManualTitle("");
-      setManualTime("");
-      setManualLocation("");
-      setManualDate("");
-      setShowManualForm(false);
-    },
-    [manualTitle, manualTime, manualLocation, manualDate, completeParsing],
-  );
+  const handleCancelParsed = useCallback(() => {
+    setParsedResult(null)
+  }, [])
 
   const handleConfirm = useCallback(
     (draftId: string) => {
-      confirmItem(draftId);
+      confirmItem(draftId)
     },
     [confirmItem],
-  );
+  )
 
   const handleDiscard = useCallback(
     (draftId: string) => {
-      resetDraft();
+      resetDraft()
     },
     [resetDraft],
-  );
-
-  const todayStr = new Date().toISOString().split("T")[0];
+  )
 
   // ── Derived data ────────────────────────────────────
-  const pendingDrafts = state.draftAgenda.filter((d) => !d.confirmed);
-  const confirmedDrafts = state.draftAgenda.filter((d) => d.confirmed);
+  const pendingDrafts = state.draftAgenda.filter((d) => !d.confirmed)
+  const confirmedDrafts = state.draftAgenda.filter((d) => d.confirmed)
 
   // Merge confirmedEvents + confirmed drafts for overview (with type tag)
   const allConfirmed: Array<{
-    id: string;
-    date: string;
-    time?: string;
-    title: string;
-    location?: string;
-    origin: "event" | "draft";
+    id: string
+    date: string
+    time?: string
+    title: string
+    location?: string
+    origin: 'event' | 'draft'
   }> = [
     ...state.confirmedEvents.map((e) => ({
       id: e.id,
@@ -454,7 +617,7 @@ export default function CalendarDetailView() {
       time: e.time,
       title: e.title,
       location: e.location,
-      origin: "event" as const,
+      origin: 'event' as const,
     })),
     ...confirmedDrafts.map((d) => ({
       id: d.id,
@@ -462,30 +625,28 @@ export default function CalendarDetailView() {
       time: d.time,
       title: d.title,
       location: d.location,
-      origin: "draft" as const,
+      origin: 'draft' as const,
     })),
-  ];
+  ]
 
   // ── Event action handlers ─────────────────────────
   const handleDeleteEvent = useCallback(
-    (id: string, origin: "event" | "draft") => {
-      if (origin === "event") {
-        deleteConfirmedEvent(id);
+    (id: string, origin: 'event' | 'draft') => {
+      if (origin === 'event') {
+        deleteConfirmedEvent(id)
       } else {
-        discardItem(id);
+        discardItem(id)
       }
     },
     [deleteConfirmedEvent, discardItem],
-  );
+  )
 
   const handleEditEvent = useCallback(
-    (_id: string, _origin: "event" | "draft") => {
-      // Simple edit placeholder: toggle manual form for future implementation
-      setShowManualForm(true);
-      setManualDate(todayStr);
+    (_id: string, _origin: 'event' | 'draft') => {
+      showToast('编辑功能开发中')
     },
-    [todayStr],
-  );
+    [showToast],
+  )
 
   // ── Render ──────────────────────────────────────────
   return (
@@ -523,91 +684,61 @@ export default function CalendarDetailView() {
       {/* ── Content ──────────────────────────────── */}
       <div className="max-w-lg mx-auto px-4 py-4 space-y-4 pb-24">
         {/* ═══════════════════════════════════════════
-            Section 1: 手动添加 (Manual Entry — top priority)
+            Section 1: 快捷添加 (Natural Language Entry)
             ═══════════════════════════════════════════ */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.1 }}
-          ref={manualFormRef}
         >
           <div className="flex items-center gap-2 mb-2.5">
             <div className="w-1 h-4 rounded-full bg-[#22c55e]" />
             <h2 className="text-[14px] font-semibold text-[#1e293b] tracking-wide">
-              手动添加
+              快捷添加
             </h2>
+            <span className="text-[10px] text-[#94a3b8] bg-[#f8fafc] px-1.5 py-0.5 rounded-full">
+              自然语言录入
+            </span>
           </div>
 
-          {!showManualForm ? (
-            <button
-              onClick={() => {
-                setShowManualForm(true);
-                setManualDate(todayStr);
-              }}
-              className="w-full flex items-center justify-center gap-2 bg-white rounded-[20px] border-2 border-dashed border-[#e2e8f0] p-4 text-[#64748b] hover:text-[#4f46e5] hover:border-[#c7d2fe] hover:bg-[#fafaff] transition-all shadow-sm"
-            >
-              <Plus size={18} />
-              <span className="text-[13px] font-medium">新增日程</span>
-            </button>
-          ) : (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white rounded-[20px] border border-[#e8ecf1] p-4 shadow-sm overflow-hidden"
-            >
-              <form onSubmit={handleManualSubmit} className="space-y-3">
-                {/* 事项名称 — single-line Title */}
-                <div>
-                  <input
-                    type="text"
-                    value={manualTitle}
-                    onChange={(e) => setManualTitle(e.target.value)}
-                    placeholder="日程标题"
-                    required
-                    className="w-full h-10 px-3 text-[13px] font-medium text-[#1e293b] placeholder-[#c0c8d4] bg-[#f8fafc] rounded-xl border border-[#e2e8f0] outline-none focus:border-[#4f46e5] focus:ring-1 focus:ring-[#4f46e5]/20 transition-all"
-                  />
-                </div>
+          <div className="bg-white rounded-[20px] border border-[#e8ecf1] p-4 shadow-sm">
+            <textarea
+              value={nlInput}
+              onChange={(e) => setNlInput(e.target.value)}
+              placeholder="输入自然语言指令，例如：下周二下午三点在法学院302开班委例会，或本周五前交民法作业。AI 将自动解析时间与地点。"
+              className="w-full h-[72px] text-[13px] leading-relaxed text-[#1e293b] placeholder-[#c0c8d4] bg-[#f8fafc] rounded-xl border border-[#e2e8f0] p-3 resize-none outline-none focus:border-[#4f46e5] focus:ring-1 focus:ring-[#4f46e5]/20 transition-all"
+            />
+            <div className="flex justify-end mt-3">
+              <button
+                onClick={handleAiParse}
+                disabled={isParsing || !nlInput.trim()}
+                className="flex items-center gap-1.5 px-4 py-2 text-[12px] font-medium rounded-xl bg-[#4f46e5] text-white hover:bg-[#4338ca] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm shadow-[#4f46e5]/20"
+              >
+                {isParsing ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    解析中...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={14} />
+                    AI 识别并添加
+                  </>
+                )}
+              </button>
+            </div>
 
-                {/* 下方小字 Time/Location */}
-                <div className="grid grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    value={manualTime}
-                    onChange={(e) => setManualTime(e.target.value)}
-                    placeholder="时间 (如 10:00 AM)"
-                    className="w-full h-9 px-3 text-[12px] text-[#64748b] placeholder-[#c0c8d4] bg-[#f8fafc] rounded-xl border border-[#e2e8f0] outline-none focus:border-[#4f46e5] transition-all"
-                  />
-                  <input
-                    type="text"
-                    value={manualLocation}
-                    onChange={(e) => setManualLocation(e.target.value)}
-                    placeholder="地点 (如 法学院302)"
-                    className="w-full h-9 px-3 text-[12px] text-[#64748b] placeholder-[#c0c8d4] bg-[#f8fafc] rounded-xl border border-[#e2e8f0] outline-none focus:border-[#4f46e5] transition-all"
-                  />
-                </div>
-
-                {/* Buttons */}
-                <div className="flex justify-end gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => setShowManualForm(false)}
-                    className="px-3 py-1.5 text-[11px] text-[#94a3b8] hover:text-[#64748b] transition-colors"
-                  >
-                    取消
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={!manualTitle.trim() || !manualTime.trim() || !manualLocation.trim()}
-                    className="flex items-center gap-1 px-4 py-1.5 text-[11px] rounded-lg bg-[#4f46e5] text-white hover:bg-[#4338ca] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm shadow-[#4f46e5]/20"
-                  >
-                    <Plus size={12} />
-                    添加待确认
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          )}
+            {/* AI 解析确认卡片 */}
+            <AnimatePresence>
+              {parsedResult && (
+                <ParsedConfirmCard
+                  parsed={parsedResult}
+                  onConfirm={handleConfirmParsed}
+                  onCancel={handleCancelParsed}
+                />
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
 
         {/* ═══════════════════════════════════════════
@@ -628,7 +759,13 @@ export default function CalendarDetailView() {
             </span>
           </div>
 
-          <WeekHeader events={allConfirmed} />
+          <WeekHeader
+            events={allConfirmed}
+            selectedDay={selectedDay}
+            onSelectDay={setSelectedDay}
+            weekOffset={weekOffset}
+            onWeekOffsetChange={setWeekOffset}
+          />
 
           {/* All confirmed events list */}
           {allConfirmed.length > 0 && (
@@ -675,25 +812,25 @@ export default function CalendarDetailView() {
           <motion.div
             whileTap={{ scale: 0.99 }}
             onDragOver={(e) => {
-              e.preventDefault();
-              setDragOver(true);
+              e.preventDefault()
+              setDragOver(true)
             }}
             onDragLeave={(e) => {
-              e.preventDefault();
-              setDragOver(false);
+              e.preventDefault()
+              setDragOver(false)
             }}
             onDrop={(e) => {
-              e.preventDefault();
-              setDragOver(false);
+              e.preventDefault()
+              setDragOver(false)
               if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                handleFiles(e.dataTransfer.files);
+                handleFiles(e.dataTransfer.files)
               }
             }}
             onClick={() => fileInputRef.current?.click()}
             className={`relative rounded-[20px] border-2 border-dashed p-6 text-center cursor-pointer transition-all duration-200 ${
               dragOver
-                ? "border-[#4f46e5] bg-[#eef2ff] scale-[1.01]"
-                : "border-[#e2e8f0] bg-white hover:border-[#c7d2fe] hover:bg-[#fafaff]"
+                ? 'border-[#4f46e5] bg-[#eef2ff] scale-[1.01]'
+                : 'border-[#e2e8f0] bg-white hover:border-[#c7d2fe] hover:bg-[#fafaff]'
             } shadow-sm`}
           >
             <input
@@ -704,15 +841,15 @@ export default function CalendarDetailView() {
               className="hidden"
               onChange={(e) => {
                 if (e.target.files && e.target.files.length > 0) {
-                  handleFiles(e.target.files);
+                  handleFiles(e.target.files)
                 }
-                e.target.value = "";
+                e.target.value = ''
               }}
             />
             <Upload
               size={28}
               className={`mx-auto mb-2 transition-colors ${
-                dragOver ? "text-[#4f46e5]" : "text-[#94a3b8]"
+                dragOver ? 'text-[#4f46e5]' : 'text-[#94a3b8]'
               }`}
             />
             <p className="text-[13px] font-medium text-[#1e293b] mb-1">
@@ -727,15 +864,15 @@ export default function CalendarDetailView() {
           <div className="mt-3">
             <button
               onClick={() => {
-                setShowPasteArea(!showPasteArea);
+                setShowPasteArea(!showPasteArea)
                 if (!showPasteArea) {
-                  setTimeout(() => pasteRef.current?.focus(), 100);
+                  setTimeout(() => pasteRef.current?.focus(), 100)
                 }
               }}
               className="flex items-center gap-1.5 text-[12px] text-[#64748b] hover:text-[#4f46e5] transition-colors"
             >
               <ClipboardPaste size={14} />
-              {showPasteArea ? "收起粘贴区" : "粘贴文字"}
+              {showPasteArea ? '收起粘贴区' : '粘贴文字'}
             </button>
           </div>
 
@@ -743,7 +880,7 @@ export default function CalendarDetailView() {
             {showPasteArea && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
+                animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.25 }}
                 className="overflow-hidden"
@@ -759,8 +896,8 @@ export default function CalendarDetailView() {
                   <div className="flex justify-end gap-2 mt-2">
                     <button
                       onClick={() => {
-                        setPastedText("");
-                        setShowPasteArea(false);
+                        setPastedText('')
+                        setShowPasteArea(false)
                       }}
                       className="px-3 py-1.5 text-[11px] text-[#94a3b8] hover:text-[#64748b] transition-colors"
                     >
@@ -792,14 +929,14 @@ export default function CalendarDetailView() {
                 <span className="text-[10px] bg-[#f1f5f9] text-[#64748b] px-1.5 py-0.5 rounded-full font-medium">
                   {state.sources.length}份
                 </span>
-                <span className="text-[10px] ml-0.5">{sourceListExpanded ? "▲" : "▼"}</span>
+                <span className="text-[10px] ml-0.5">{sourceListExpanded ? '▲' : '▼'}</span>
               </button>
 
               <AnimatePresence>
                 {sourceListExpanded && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
+                    animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.25 }}
                     className="overflow-hidden"
@@ -814,13 +951,13 @@ export default function CalendarDetailView() {
                           className="flex items-center justify-between bg-white rounded-xl px-3 py-2.5 border border-[#e8ecf1] shadow-sm"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            {src.type === "image" ? (
+                            {src.type === 'image' ? (
                               <Image size={15} className="text-[#94a3b8] flex-shrink-0" />
                             ) : (
                               <FileText size={15} className="text-[#94a3b8] flex-shrink-0" />
                             )}
                             <span className="text-[12px] text-[#1e293b] truncate">
-                              {src.type === "image" ? "图片素材" : src.type === "file" ? "文件素材" : "文本素材"}
+                              {src.type === 'image' ? '图片素材' : src.type === 'file' ? '文件素材' : '文本素材'}
                             </span>
                           </div>
                           <button
@@ -909,11 +1046,11 @@ export default function CalendarDetailView() {
               还没有任何日程
             </h3>
             <p className="text-[12px] text-[#94a3b8] max-w-[240px]">
-              上传通知截图、粘贴课程文字，或手动添加一条日程开始使用
+              上传通知截图、粘贴课程文字，或使用快捷添加录入一条日程
             </p>
           </motion.div>
         )}
       </div>
     </div>
-  );
+  )
 }

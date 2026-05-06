@@ -6,6 +6,9 @@ import {
   buildCompleteSystemPrompt,
 } from "@/src/lib/uiRequestProtocol";
 
+export const runtime = "edge";
+export const maxDuration = 25;
+
 const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
 
 export async function POST(req: Request) {

@@ -77,7 +77,8 @@ export default function App() {
   }, [messages, isAiThinking, activeTab]);
 
   useEffect(() => {
-    if (view === "class") {
+    if (view === "class" && messages.length === 0) {
+      // 仅在消息列表为空时设置初始欢迎语，避免覆盖已注入的 isCard 消息
       const context =
         orgContextMap[currentOrgName] || orgContextMap["我的班级"];
       setMessages([

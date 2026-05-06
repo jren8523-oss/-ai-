@@ -24,6 +24,7 @@ interface QuickActionsPanelProps {
   setNewActionLabel: (v: string) => void;
   newActionPrompt: string;
   setNewActionPrompt: (v: string) => void;
+  onQuickAction?: (actionId: string) => void;
 }
 
 export default function QuickActionsPanel({
@@ -40,6 +41,7 @@ export default function QuickActionsPanel({
   setNewActionLabel,
   newActionPrompt,
   setNewActionPrompt,
+  onQuickAction,
 }: QuickActionsPanelProps) {
   if (!showMorePanel) return null;
 
@@ -83,7 +85,11 @@ export default function QuickActionsPanel({
               <div
                 className="flex items-center gap-3 flex-1 cursor-pointer"
                 onClick={() => {
-                  setChatInput(action.prompt);
+                  if (onQuickAction) {
+                    onQuickAction(action.id);
+                  } else {
+                    setChatInput(action.prompt);
+                  }
                   setShowMorePanel(false);
                 }}
               >

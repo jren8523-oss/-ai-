@@ -20,6 +20,7 @@ interface ChatInputBarProps {
   chatInput: string;
   isAiThinking: boolean;
   handleSend: () => void;
+  onQuickAction?: (actionId: string) => void;
 }
 
 export default function ChatInputBar({
@@ -32,6 +33,7 @@ export default function ChatInputBar({
   chatInput,
   isAiThinking,
   handleSend,
+  onQuickAction,
 }: ChatInputBarProps) {
   return (
     <div className="bg-[#f6f7f9] border-t border-zinc-200/80 pt-2 pb-[34px] shrink-0 absolute bottom-0 w-full z-20 flex flex-col">
@@ -43,7 +45,13 @@ export default function ChatInputBar({
             .map((action) => (
               <button
                 key={action.id}
-                onClick={() => setChatInput(action.prompt)}
+                onClick={() => {
+                  if (onQuickAction) {
+                    onQuickAction(action.id);
+                  } else {
+                    setChatInput(action.prompt);
+                  }
+                }}
                 className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
               >
                 {action.icon === "✨" ? (

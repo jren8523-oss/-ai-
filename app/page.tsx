@@ -98,6 +98,46 @@ export default function App() {
     return null;
   };
 
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 2000);
+  };
+
+  // Direct quick action handler: maps action id → card type → insert card message immediately
+  const handleQuickAction = (actionId: string) => {
+    const cardMap: Record<string, { type: "sign-in-card" | "schedule-card" | "books-card" | "notice-card"; label: string }> = {
+      sign: { type: "sign-in-card", label: "签到" },
+      schedule: { type: "schedule-card", label: "统计晚自习" },
+      books: { type: "books-card", label: "教材征订" },
+      notice: { type: "notice-card", label: "发布通知" },
+    };
+    const mapping = cardMap[actionId];
+
+    // Build user message text from the action
+    const action = allActions.find((a) => a.id === actionId);
+    const userText = action?.prompt || mapping?.label || "";
+
+    // Insert user message
+    const userMsgId = Date.now().toString();
+    setMessages((prev) => [
+      ...prev,
+      { id: userMsgId, role: "user", type: "text", content: userText },
+    ]);
+
+    // If it's a known preset card, insert card directly; otherwise treat as text → AI
+    if (mapping) {
+      setMessages((prev) => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), role: "ai", type: mapping.type, content: mapping.label },
+      ]);
+      showToast("快速指令已执行");
+    } else {
+      // Fallback: fill text into chat input for manual send (custom actions)
+      setChatInput(userText);
+      showToast("自定义指令已填入");
+    }
+  };
+
   const handleSend = async () => {
     const text = chatInput.trim();
     if (!text) return;
@@ -204,11 +244,6 @@ export default function App() {
   const [activeApp, setActiveApp] = useState<"files" | "albums" | "highlights">(
     "files",
   );
-
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 2000);
-  };
 
   // ── Fetch tasks for student role ──
   const fetchStudentTasks = async () => {
@@ -320,6 +355,7 @@ export default function App() {
                     chatInput={chatInput}
                     isAiThinking={isAiThinking}
                     handleSend={handleSend}
+                    onQuickAction={handleQuickAction}
                   />
                 </div>
               )}
@@ -393,6 +429,7 @@ export default function App() {
           setNewActionLabel={setNewActionLabel}
           newActionPrompt={newActionPrompt}
           setNewActionPrompt={setNewActionPrompt}
+          onQuickAction={handleQuickAction}
         />
 
         <PosterShareModal

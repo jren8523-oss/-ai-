@@ -128,11 +128,11 @@ export default function App() {
       handleTriggerCard(cardType);
       return;
     }
-    // Fallback for custom actions: fill chat input
-    const action = allActions.find((a) => a.id === actionId);
-    const userText = action?.prompt || "";
-    setChatInput(userText);
-    showToast("自定义指令已填入");
+    // Fallback for custom actions: fill chat input — 幽灵代码已注释，仅保留 toast
+    // const action = allActions.find((a) => a.id === actionId);
+    // const userText = action?.prompt || "";
+    // setChatInput(userText);
+    showToast("自定义指令已填入（输入框注入已被阻断）");
   };
 
   const handleSend = async () => {

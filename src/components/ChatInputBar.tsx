@@ -39,39 +39,62 @@ export default function ChatInputBar({
 }: ChatInputBarProps) {
   return (
     <div className="bg-[#f6f7f9] border-t border-zinc-200/80 pt-2 pb-[34px] shrink-0 absolute bottom-0 w-full z-20 flex flex-col">
-      {/* Quick Actions (Admin Only) */}
+      {/* Quick Actions (Admin Only) — 暴力强拆：硬编码原生 button，不经过任何中间组件/变量 */}
       {currentOrgRole === "admin" && activeTab === "assistant" && (
         <div className="overflow-x-auto hide-scrollbar flex gap-2 px-3 pb-2 w-full">
-          {allActions
-            .filter((action) => pinnedIds.includes(action.id))
-            .map((action) => (
-              <button
-                type="button"
-                key={action.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  alert("拦截成功！准备触发卡片: " + action.id);
-                  const text = action.label || "";
-                  if (text.includes("签到")) onTriggerCard?.("SignInCard");
-                  else if (text.includes("晚自习") || text.includes("测试标记")) onTriggerCard?.("ScheduleCard");
-                  else if (text.includes("教材")) onTriggerCard?.("BooksCard");
-                  else if (text.includes("通知")) onTriggerCard?.("NoticeCard");
-                  // 绝对不调用 setChatInput / onQuickAction / handleSend
-                }}
-                className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
-              >
-                {action.icon === "✨" ? (
-                  <Sparkles
-                    size={14}
-                    className="text-blue-500 mr-1"
-                  />
-                ) : (
-                  <span className="mr-1">{action.icon}</span>
-                )}{" "}
-                {action.label}
-              </button>
-            ))}
+          {/* 1. 发起签到 */}
+          <button
+            type="button"
+            className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              alert("拦截成功！硬编码按钮: SignInCard");
+              onTriggerCard?.("SignInCard");
+            }}
+          >
+            <span className="mr-1">📍</span> 发起签到
+          </button>
+          {/* 2. 统计晚自习出勤 */}
+          <button
+            type="button"
+            className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              alert("拦截成功！硬编码按钮: ScheduleCard");
+              onTriggerCard?.("ScheduleCard");
+            }}
+          >
+            <span className="mr-1">📊</span> 晚自习(测试标记)
+          </button>
+          {/* 3. 征订民法教材 */}
+          <button
+            type="button"
+            className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              alert("拦截成功！硬编码按钮: BooksCard");
+              onTriggerCard?.("BooksCard");
+            }}
+          >
+            <span className="mr-1">📚</span> 征订民法教材
+          </button>
+          {/* 4. 发布放假通知 */}
+          <button
+            type="button"
+            className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              alert("拦截成功！硬编码按钮: NoticeCard");
+              onTriggerCard?.("NoticeCard");
+            }}
+          >
+            <span className="mr-1">📢</span> 发布放假通知
+          </button>
+          {/* More 按钮保留 */}
           <div className="shrink-0 flex items-center justify-center pr-1 w-8">
             <button
               type="button"

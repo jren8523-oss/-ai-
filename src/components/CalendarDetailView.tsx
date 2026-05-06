@@ -22,8 +22,8 @@ import {
   Pencil,
   Trash2,
 } from 'lucide-react'
-import { useCalendar, type SourceMaterial, type DraftAgendaItem, mockParsing, normalizeDate } from '@/store/calendarStore'
-import { useToast } from '@/components/Toast'
+import { useCalendar, type SourceMaterial, type DraftAgendaItem, mockParsing, normalizeDate } from '@/src/store/calendarStore'
+import { useToast } from '@/src/components/Toast'
 import Link from 'next/link'
 
 // ══════════════════════════════════════════════════════════

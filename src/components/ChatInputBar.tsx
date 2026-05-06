@@ -46,10 +46,12 @@ export default function ChatInputBar({
             .filter((action) => pinnedIds.includes(action.id))
             .map((action) => (
               <button
+                type="button"
                 key={action.id}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  alert("拦截成功！准备触发卡片: " + action.id);
                   console.log("[ChatInputBar] 按钮点击, action.id =", action.id, "label =", action.label);
                   // 基于 action.id 精确匹配，直接触发本地卡片，绝不发送文本
                   if (action.id === "sign") onTriggerCard?.("SignInCard");
@@ -77,6 +79,7 @@ export default function ChatInputBar({
             ))}
           <div className="shrink-0 flex items-center justify-center pr-1 w-8">
             <button
+              type="button"
               onClick={() => setShowMorePanel(true)}
               className="w-[26px] h-[26px] bg-gray-100 rounded-full flex items-center justify-center active:bg-gray-200"
             >
@@ -87,6 +90,7 @@ export default function ChatInputBar({
       )}
       <div className="flex items-center gap-2.5 w-full px-3">
         <button
+          type="button"
           onClick={() => {
             if (currentOrgRole === "member") {
               alert("AI 提示：该操作仅限管理员使用");
@@ -116,6 +120,7 @@ export default function ChatInputBar({
           />
         </div>
         <button
+          type="button"
           onClick={handleSend}
           disabled={isAiThinking || !chatInput.trim()}
           className="w-[44px] h-[44px] bg-blue-500 rounded-full flex items-center justify-center text-white shrink-0 active:bg-blue-600 active:scale-95 transition-all shadow-sm disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed"

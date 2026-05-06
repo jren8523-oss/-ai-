@@ -39,8 +39,8 @@ interface ChatTimelineProps {
 }
 
 /* ───── Role-based suggestions ───── */
-const ADMIN_SUGGESTIONS = ["发起签到", "统计晚自习出勤", "征订民法教材", "发布放假通知"];
-const STUDENT_SUGGESTIONS = ["发起签到", "统计晚自习出勤", "征订民法教材", "发布放假通知"];
+const ADMIN_SUGGESTIONS = ["发起签到", "晚自习(测试标记)", "征订民法教材", "发布放假通知"];
+const STUDENT_SUGGESTIONS = ["发起签到", "晚自习(测试标记)", "征订民法教材", "发布放假通知"];
 
 /* ───── CheckinConfigCard (interactive wizard) ───── */
 const SCENE_TEMPLATES = [
@@ -511,7 +511,7 @@ export default function ChatTimeline({
           {suggestions.map((suggestion) => {
             const SUGGESTION_CARD_MAP: Record<string, string> = {
               "发起签到": "SignInCard",
-              "统计晚自习出勤": "ScheduleCard",
+              "晚自习(测试标记)": "ScheduleCard",
               "征订民法教材": "BooksCard",
               "发布放假通知": "NoticeCard",
             };

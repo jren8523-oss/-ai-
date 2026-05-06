@@ -63,6 +63,7 @@ export default function QuickActionsPanel({
             快捷指令中心
           </h3>
           <button
+            type="button"
             onClick={() => setShowMorePanel(false)}
             className="p-1 active:bg-zinc-100 rounded-full"
           >
@@ -73,6 +74,7 @@ export default function QuickActionsPanel({
         <div className="flex flex-col px-4 pt-2 max-h-[400px] overflow-y-auto">
           {/* Create Button */}
           <button
+            type="button"
             onClick={() => setShowAddCustomAction(true)}
             className="flex items-center justify-center gap-2 py-3.5 mb-2 mt-1 border border-dashed border-zinc-200 rounded-xl text-blue-600 font-bold text-[14px] active:bg-blue-50 transition-colors"
           >
@@ -87,6 +89,7 @@ export default function QuickActionsPanel({
               <div
                 className="flex items-center gap-3 flex-1 cursor-pointer"
                 onClick={() => {
+                  alert("拦截成功！准备触发卡片: " + action.id);
                   // 预设 action.id 直接走卡片路线，绕过 setChatInput
                   if (action.id === "sign") onTriggerCard?.("SignInCard");
                   else if (action.id === "schedule") onTriggerCard?.("ScheduleCard");
@@ -112,6 +115,7 @@ export default function QuickActionsPanel({
               <div className="flex items-center gap-1 shrink-0">
                 {action.isCustom && (
                   <button
+                    type="button"
                     className="p-2 active:scale-90 transition-transform"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -127,6 +131,7 @@ export default function QuickActionsPanel({
                   </button>
                 )}
                 <button
+                  type="button"
                   className="p-2 active:scale-90 transition-transform"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -159,7 +164,7 @@ export default function QuickActionsPanel({
         <div className="absolute inset-0 z-20 bg-white rounded-t-[24px] flex flex-col pt-4 px-5 animate-in slide-in-from-bottom-8 duration-200">
           <h3 className="text-[17px] font-bold text-zinc-800 mb-6 flex justify-between items-center">
             <span>配置自建指令</span>
-            <button onClick={() => setShowAddCustomAction(false)}>
+            <button type="button" onClick={() => setShowAddCustomAction(false)}>
               <X size={20} className="text-zinc-400" />
             </button>
           </h3>
@@ -200,12 +205,14 @@ export default function QuickActionsPanel({
 
           <div className="mt-8 flex gap-3">
             <button
+              type="button"
               onClick={() => setShowAddCustomAction(false)}
               className="flex-1 bg-zinc-100 text-zinc-600 font-bold text-[15px] py-3.5 rounded-xl active:bg-zinc-200 transition-colors"
             >
               取消
             </button>
             <button
+              type="button"
               disabled={!newActionLabel || !newActionPrompt}
               onClick={() => {
                 const newId = "custom_" + Date.now();

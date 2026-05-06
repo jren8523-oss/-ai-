@@ -5,10 +5,10 @@
 import type { CalendarEvent } from "@/src/store/calendarStore";
 
 export const QUICK_ACTIONS: { id: string; icon: string; label: string; prompt: string; isCustom?: boolean }[] = [
-  { id: "sign", icon: "📍", label: "发布签到", prompt: "我要发布一个签到，截止今晚 21:00，地点3教101" },
-  { id: "schedule", icon: "📊", label: "统计晚自习", prompt: "统计本周晚自习出勤情况，周一到周五哪天有晚课" },
-  { id: "books", icon: "📚", label: "订教材", prompt: "开启教材征订：《民法学》45元，《刑法学》52元，同学们自行勾选" },
-  { id: "notice", icon: "📢", label: "发布通知", prompt: "发布重要通知：下周一体测，请大家做好准备，穿运动服带学生证。" },
+  { id: "sign", icon: "📍", label: "发起签到", prompt: "发起签到：截止今晚 21:00，地点3教101" },
+  { id: "schedule", icon: "📊", label: "统计晚自习出勤", prompt: "统计本周晚自习出勤情况，周一到周五哪天有晚课" },
+  { id: "books", icon: "📚", label: "征订民法教材", prompt: "开启教材征订：《民法学》45元，《刑法学》52元" },
+  { id: "notice", icon: "📢", label: "发布放假通知", prompt: "发布放假通知：下周一体测，请大家做好准备，穿运动服带学生证。" },
 ];
 
 export const orgContextMap: Record<string, { aiTitle: string; initialMessage: string; replyLogic: (text: string) => any }> = {

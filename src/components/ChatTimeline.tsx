@@ -425,12 +425,12 @@ export default function ChatTimeline({
 
           {/* Render Books Card (preset) */}
           {msg.type === "books-card" && (
-            <BooksCard messageId={msg.id} />
+            <BooksCard messageId={msg.id} books={msg.payload?.books} />
           )}
 
           {/* Render Notice Card (preset) */}
           {msg.type === "notice-card" && (
-            <NoticeCard messageId={msg.id} />
+            <NoticeCard messageId={msg.id} title={msg.payload?.title} content={msg.payload?.content} />
           )}
 
           {/* Render Task Card (from new task protocol - AI-generated) */}

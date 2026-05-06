@@ -52,7 +52,7 @@ export default function App() {
   const [showPosterShare, setShowPosterShare] = useState(false);
 
   const [chatInput, setChatInput] = useState("");
-  const [pinnedIds, setPinnedIds] = useState<string[]>(["sign", "notice"]);
+  const [pinnedIds, setPinnedIds] = useState<string[]>(["sign", "schedule", "books", "notice"]);
   const [showMorePanel, setShowMorePanel] = useState(false);
   const [messages, setMessages] = useState<
     {
@@ -89,12 +89,34 @@ export default function App() {
     }
   }, [view, currentOrgName, currentOrgRole]);
 
-  const detectPresetCard = (text: string): { type: string; content: string } | null => {
+  const detectPresetCard = (text: string): { type: string; content: string; payload?: any } | null => {
     const t = text.toLowerCase();
     if (t.includes("签到")) return { type: "sign-in-card", content: "签到任务" };
     if (t.includes("统计")) return { type: "schedule-card", content: "统计晚自习" };
-    if (t.includes("教材")) return { type: "books-card", content: "教材征订" };
-    if (t.includes("通知")) return { type: "notice-card", content: "发布通知" };
+    if (t.includes("教材")) {
+      // Extract book names and prices from text: 《书名》价格
+      const bookRegex = /《([^》]+)》\s*(\d+)\s*元?/g;
+      const books: { name: string; price: number }[] = [];
+      let match;
+      while ((match = bookRegex.exec(text)) !== null) {
+        books.push({ name: match[1], price: parseInt(match[2], 10) });
+      }
+      return {
+        type: "books-card",
+        content: "教材征订",
+        payload: books.length > 0 ? { books } : undefined,
+      };
+    }
+    if (t.includes("通知")) {
+      // Extract notice content: try to get text after "通知" or use full text
+      const noticeMatch = text.match(/通知[,，:：]?\s*(.+)/);
+      const noticeContent = noticeMatch ? noticeMatch[1].trim() : text;
+      return {
+        type: "notice-card",
+        content: "发布通知",
+        payload: { title: "班级通知", content: noticeContent },
+      };
+    }
     return null;
   };
 
@@ -126,9 +148,10 @@ export default function App() {
 
     // If it's a known preset card, insert card directly; otherwise treat as text → AI
     if (mapping) {
+      const preset = detectPresetCard(userText);
       setMessages((prev) => [
         ...prev,
-        { id: (Date.now() + 1).toString(), role: "ai", type: mapping.type, content: mapping.label },
+        { id: (Date.now() + 1).toString(), role: "ai", type: mapping.type, content: mapping.label, payload: preset?.payload },
       ]);
       showToast("快速指令已执行");
     } else {
@@ -154,7 +177,7 @@ export default function App() {
     if (preset) {
       setMessages((prev) => [
         ...prev,
-        { id: (Date.now() + 1).toString(), role: "ai", type: preset.type as any, content: preset.content },
+        { id: (Date.now() + 1).toString(), role: "ai", type: preset.type as any, content: preset.content, payload: preset.payload },
       ]);
       return;
     }

@@ -89,17 +89,12 @@ export default function QuickActionsPanel({
               <div
                 className="flex items-center gap-3 flex-1 cursor-pointer"
                 onClick={() => {
-                  alert("拦截成功！准备触发卡片: " + action.id);
-                  // 预设 action.id 直接走卡片路线，绕过 setChatInput
-                  if (action.id === "sign") onTriggerCard?.("SignInCard");
-                  else if (action.id === "schedule") onTriggerCard?.("ScheduleCard");
-                  else if (action.id === "books") onTriggerCard?.("BooksCard");
-                  else if (action.id === "notice") onTriggerCard?.("NoticeCard");
-                  else if (onQuickAction) {
-                    onQuickAction(action.id);
-                  } else {
-                    setChatInput(action.prompt);
-                  }
+                  const text = action.label || "";
+                  if (text.includes("签到")) onTriggerCard?.("SignInCard");
+                  else if (text.includes("晚自习") || text.includes("测试标记")) onTriggerCard?.("ScheduleCard");
+                  else if (text.includes("教材")) onTriggerCard?.("BooksCard");
+                  else if (text.includes("通知")) onTriggerCard?.("NoticeCard");
+                  // 绝对不调用 setChatInput / onQuickAction
                   setShowMorePanel(false);
                 }}
               >

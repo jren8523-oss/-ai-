@@ -35,6 +35,7 @@ interface ChatTimelineProps {
   orgContextMap: Record<string, { aiTitle: string }>;
   onSendMessage?: (text: string) => void;
   onTasksRefreshed?: () => void;
+  onTriggerCard?: (cardType: string) => void;
 }
 
 /* ───── Role-based suggestions ───── */
@@ -248,6 +249,7 @@ export default function ChatTimeline({
   orgContextMap,
   onSendMessage,
   onTasksRefreshed,
+  onTriggerCard,
 }: ChatTimelineProps) {
   const [cardActionsUsed, setCardActionsUsed] = useState<Record<string, boolean>>({});
   const [summaryTask, setSummaryTask] = useState<StoredTask | null>(null);
@@ -503,19 +505,32 @@ export default function ChatTimeline({
         </div>
       )}
 
-      {/* Role-based suggestion chips */}
+      {/* Role-based suggestion chips — directly trigger cards, no text / API */}
       <div className="flex gap-2 overflow-x-auto hide-scrollbar px-1 py-1 shrink-0">
-        {suggestions.map((suggestion) => (
-          <button
-            key={suggestion}
-            type="button"
-            onClick={() => onSendMessage?.(suggestion)}
-            disabled={isAiThinking}
-            className="px-3 py-1.5 bg-white border border-zinc-200 rounded-full text-xs text-zinc-600 whitespace-nowrap active:bg-zinc-50 hover:border-blue-300 hover:text-blue-600 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {suggestion}
-          </button>
-        ))}
+        {suggestions.map((suggestion) => {
+          const SUGGESTION_CARD_MAP: Record<string, string> = {
+            "发起签到": "SignInCard",
+            "统计晚自习出勤": "ScheduleCard",
+            "征订民法教材": "BooksCard",
+            "发布放假通知": "NoticeCard",
+          };
+          const cardType = SUGGESTION_CARD_MAP[suggestion];
+          return (
+            <button
+              key={suggestion}
+              type="button"
+              onClick={() => {
+                if (cardType && onTriggerCard) {
+                  onTriggerCard(cardType);
+                }
+              }}
+              disabled={isAiThinking}
+              className="px-3 py-1.5 bg-white border border-zinc-200 rounded-full text-xs text-zinc-600 whitespace-nowrap active:bg-zinc-50 hover:border-blue-300 hover:text-blue-600 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {suggestion}
+            </button>
+          );
+        })}
       </div>
 
       <div ref={messagesEndRef} className="h-4 w-full shrink-0"></div>

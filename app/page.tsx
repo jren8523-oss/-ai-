@@ -92,24 +92,18 @@ export default function App() {
     }
   }, [view, currentOrgName, currentOrgRole]);
 
-  const detectPresetCard = (text: string): { type: string; content: string; payload?: any } | null => {
-    if (text === "发起签到") return { type: "sign-in-card", content: "签到任务" };
-    if (text === "统计晚自习出勤") return { type: "schedule-card", content: "统计晚自习" };
-    if (text === "征订民法教材") {
-      return {
-        type: "books-card",
-        content: "教材征订",
-        payload: { books: [{ name: "民法学", price: 45 }, { name: "刑法学", price: 52 }] },
-      };
-    }
-    if (text === "发布放假通知") {
-      return {
-        type: "notice-card",
-        content: "发布通知",
-        payload: { title: "放假通知", content: "根据学校安排，下周放假安排如下……" },
-      };
-    }
-    return null;
+  // Direct card trigger: bypass text, bypass AI, directly inject card message
+  const handleTriggerCard = (cardType: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        role: "ai",
+        content: "",
+        isCard: true,
+        cardType,
+      },
+    ]);
   };
 
   const showToast = (msg: string) => {
@@ -117,66 +111,29 @@ export default function App() {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
-  // Direct quick action handler: maps action id → card type → insert card message immediately
+  // Quick action handler: delegate to card trigger for preset cards, fallback for custom
   const handleQuickAction = (actionId: string) => {
-    const cardMap: Record<string, { type: "sign-in-card" | "schedule-card" | "books-card" | "notice-card"; label: string }> = {
-      sign: { type: "sign-in-card", label: "签到" },
-      schedule: { type: "schedule-card", label: "统计晚自习" },
-      books: { type: "books-card", label: "教材征订" },
-      notice: { type: "notice-card", label: "发布通知" },
+    const CARD_MAP: Record<string, string> = {
+      sign: "SignInCard",
+      schedule: "ScheduleCard",
+      books: "BooksCard",
+      notice: "NoticeCard",
     };
-    const mapping = cardMap[actionId];
-
-    // Build user message text from the action
-    const action = allActions.find((a) => a.id === actionId);
-    const userText = action?.prompt || mapping?.label || "";
-
-    // Insert user message
-    const userMsgId = Date.now().toString();
-    setMessages((prev) => [
-      ...prev,
-      { id: userMsgId, role: "user", type: "text", content: userText },
-    ]);
-
-    // If it's a known preset card, insert card directly; otherwise treat as text → AI
-    if (mapping) {
-      const preset = detectPresetCard(userText);
-      setMessages((prev) => [
-        ...prev,
-        { id: (Date.now() + 1).toString(), role: "ai", type: mapping.type, content: mapping.label, payload: preset?.payload },
-      ]);
-      showToast("快速指令已执行");
-    } else {
-      // Fallback: fill text into chat input for manual send (custom actions)
-      setChatInput(userText);
-      showToast("自定义指令已填入");
+    const cardType = CARD_MAP[actionId];
+    if (cardType) {
+      handleTriggerCard(cardType);
+      return;
     }
+    // Fallback for custom actions: fill chat input
+    const action = allActions.find((a) => a.id === actionId);
+    const userText = action?.prompt || "";
+    setChatInput(userText);
+    showToast("自定义指令已填入");
   };
 
   const handleSend = async () => {
     const text = chatInput.trim();
     if (!text) return;
-
-    // ── Mandatory front-end interception: block network requests for preset card triggers ──
-    const trimText = text;
-    let cardType: string | null = null;
-    if (trimText === "发起签到") cardType = 'SignInCard';
-    else if (trimText === "统计晚自习出勤") cardType = 'ScheduleCard';
-    else if (trimText === "征订民法教材") cardType = 'BooksCard';
-    else if (trimText === "发布放假通知") cardType = 'NoticeCard';
-
-    if (cardType) {
-      // 1. Push user message to screen
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now().toString(), role: "user", type: "text", content: trimText },
-        // 2. Simulate AI reply, forcefully inject card marker, content left empty
-        { id: (Date.now() + 1).toString(), role: "ai", content: '', isCard: true, cardType: cardType },
-      ]);
-      setChatInput("");
-      // 3. CRITICAL: return immediately, absolutely block any further network request to the LLM!
-      return;
-    }
 
     const userMsgId = Date.now().toString();
     setMessages((prev) => [

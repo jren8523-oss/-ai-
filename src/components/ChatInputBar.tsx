@@ -21,6 +21,7 @@ interface ChatInputBarProps {
   isAiThinking: boolean;
   handleSend: () => void;
   onQuickAction?: (actionId: string) => void;
+  onTriggerCard?: (cardType: string) => void;
 }
 
 export default function ChatInputBar({
@@ -34,6 +35,7 @@ export default function ChatInputBar({
   isAiThinking,
   handleSend,
   onQuickAction,
+  onTriggerCard,
 }: ChatInputBarProps) {
   return (
     <div className="bg-[#f6f7f9] border-t border-zinc-200/80 pt-2 pb-[34px] shrink-0 absolute bottom-0 w-full z-20 flex flex-col">
@@ -46,7 +48,16 @@ export default function ChatInputBar({
               <button
                 key={action.id}
                 onClick={() => {
-                  if (onQuickAction) {
+                  const CARD_MAP: Record<string, string> = {
+                    sign: "SignInCard",
+                    schedule: "ScheduleCard",
+                    books: "BooksCard",
+                    notice: "NoticeCard",
+                  };
+                  const cardType = CARD_MAP[action.id];
+                  if (cardType && onTriggerCard) {
+                    onTriggerCard(cardType);
+                  } else if (onQuickAction) {
                     onQuickAction(action.id);
                   } else {
                     setChatInput(action.prompt);

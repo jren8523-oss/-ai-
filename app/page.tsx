@@ -58,12 +58,14 @@ export default function App() {
     {
       id: string;
       role: "user" | "ai";
-      type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
+      type?: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
       content?: string;
       payload?: any;
       uiRequest?: UIRequestPayload;
       task?: StoredTask;
       tasks?: StoredTask[];
+      isCard?: boolean;
+      cardType?: string;
     }[]
   >([]);
   const [isAiThinking, setIsAiThinking] = useState(false);
@@ -166,22 +168,33 @@ export default function App() {
     const text = chatInput.trim();
     if (!text) return;
 
+    // ── Mandatory front-end interception: block network requests for preset card triggers ──
+    const trimText = text;
+    let cardType: string | null = null;
+    if (trimText.includes("签到")) cardType = 'SignInCard';
+    else if (trimText.includes("统计") || trimText.includes("晚自习")) cardType = 'ScheduleCard';
+    else if (trimText.includes("教材") || trimText.includes("征订")) cardType = 'BooksCard';
+    else if (trimText.includes("通知") || trimText.includes("放假")) cardType = 'NoticeCard';
+
+    if (cardType) {
+      // 1. Push user message to screen
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now().toString(), role: "user", type: "text", content: trimText },
+        // 2. Simulate AI reply, forcefully inject card marker, content left empty
+        { id: (Date.now() + 1).toString(), role: "ai", content: '', isCard: true, cardType: cardType },
+      ]);
+      setChatInput("");
+      // 3. CRITICAL: return immediately, absolutely block any further network request to the LLM!
+      return;
+    }
+
     const userMsgId = Date.now().toString();
     setMessages((prev) => [
       ...prev,
       { id: userMsgId, role: "user", type: "text", content: text },
     ]);
     setChatInput("");
-
-    // Check if this is a preset card — skip AI and render interactive card directly
-    const preset = detectPresetCard(text);
-    if (preset) {
-      setMessages((prev) => [
-        ...prev,
-        { id: (Date.now() + 1).toString(), role: "ai", type: preset.type as any, content: preset.content, payload: preset.payload },
-      ]);
-      return;
-    }
 
     setIsAiThinking(true);
 

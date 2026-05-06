@@ -15,12 +15,14 @@ import NoticeCard from "@/src/components/cards/NoticeCard";
 export interface Message {
   id: string;
   role: "user" | "ai";
-  type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
+  type?: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
   content?: string;
   payload?: any;
   uiRequest?: UIRequestPayload;
   task?: StoredTask;
   tasks?: StoredTask[]; // 同学侧拉取的所有待处理任务
+  isCard?: boolean;
+  cardType?: string;
 }
 
 interface ChatTimelineProps {
@@ -304,6 +306,16 @@ export default function ChatTimeline({
             >
               {getInitialContent(msg)}
             </div>
+          )}
+
+          {/* Render Card from front-end interception (isCard flag) */}
+          {msg.isCard && (
+            <>
+              {msg.cardType === 'SignInCard' && <SignInCard messageId={msg.id} />}
+              {msg.cardType === 'ScheduleCard' && <ScheduleCard messageId={msg.id} />}
+              {msg.cardType === 'BooksCard' && <BooksCard messageId={msg.id} />}
+              {msg.cardType === 'NoticeCard' && <NoticeCard messageId={msg.id} />}
+            </>
           )}
 
           {/* Render Books */}

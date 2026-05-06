@@ -7,11 +7,15 @@ import {
 import type { UIRequestPayload } from "@/src/lib/uiRequestProtocol";
 import type { StoredTask } from "@/src/lib/taskStore";
 import TaskCards, { SummaryPopup } from "@/src/components/TaskCards";
+import SignInCard from "@/src/components/cards/SignInCard";
+import ScheduleCard from "@/src/components/cards/ScheduleCard";
+import BooksCard from "@/src/components/cards/BooksCard";
+import NoticeCard from "@/src/components/cards/NoticeCard";
 
 export interface Message {
   id: string;
   role: "user" | "ai";
-  type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card";
+  type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
   content?: string;
   payload?: any;
   uiRequest?: UIRequestPayload;
@@ -407,6 +411,26 @@ export default function ChatTimeline({
                 未知卡片类型: {msg.uiRequest.component}
               </div>
             )
+          )}
+
+          {/* Render Sign-in Card (preset) */}
+          {msg.type === "sign-in-card" && (
+            <SignInCard messageId={msg.id} />
+          )}
+
+          {/* Render Schedule Card (preset) */}
+          {msg.type === "schedule-card" && (
+            <ScheduleCard messageId={msg.id} />
+          )}
+
+          {/* Render Books Card (preset) */}
+          {msg.type === "books-card" && (
+            <BooksCard messageId={msg.id} />
+          )}
+
+          {/* Render Notice Card (preset) */}
+          {msg.type === "notice-card" && (
+            <NoticeCard messageId={msg.id} />
           )}
 
           {/* Render Task Card (from new task protocol - AI-generated) */}

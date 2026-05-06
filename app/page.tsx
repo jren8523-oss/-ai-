@@ -58,7 +58,7 @@ export default function App() {
     {
       id: string;
       role: "user" | "ai";
-      type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card";
+      type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
       content?: string;
       uiRequest?: UIRequestPayload;
       task?: StoredTask;
@@ -89,15 +89,36 @@ export default function App() {
     }
   }, [view, currentOrgName, currentOrgRole]);
 
+  const detectPresetCard = (text: string): { type: string; content: string } | null => {
+    const t = text.toLowerCase();
+    if (t.includes("签到")) return { type: "sign-in-card", content: "签到任务" };
+    if (t.includes("统计")) return { type: "schedule-card", content: "统计晚自习" };
+    if (t.includes("教材")) return { type: "books-card", content: "教材征订" };
+    if (t.includes("通知")) return { type: "notice-card", content: "发布通知" };
+    return null;
+  };
+
   const handleSend = async () => {
     const text = chatInput.trim();
     if (!text) return;
 
+    const userMsgId = Date.now().toString();
     setMessages((prev) => [
       ...prev,
-      { id: Date.now().toString(), role: "user", type: "text", content: text },
+      { id: userMsgId, role: "user", type: "text", content: text },
     ]);
     setChatInput("");
+
+    // Check if this is a preset card — skip AI and render interactive card directly
+    const preset = detectPresetCard(text);
+    if (preset) {
+      setMessages((prev) => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), role: "ai", type: preset.type as any, content: preset.content },
+      ]);
+      return;
+    }
+
     setIsAiThinking(true);
 
     try {

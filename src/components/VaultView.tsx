@@ -363,26 +363,11 @@ export default function VaultView({
       );
     }
 
-    // ---- Sub-view: tasks (delegated to TaskCards) ----
+    // ---- Sub-view: tasks (placeholder) ----
     return (
-      <TaskCards
-        taskTab={taskTab}
-        setTaskTab={setTaskTab}
-        activeTaskForm={activeTaskForm}
-        setActiveTaskForm={setActiveTaskForm}
-        isTaskSubmitting={isTaskSubmitting}
-        handleTaskSubmit={handleTaskSubmit}
-        currentOrgName={currentOrgName}
-        mockTasks={mockTasks}
-        orderAmount={orderAmount}
-        setOrderAmount={setOrderAmount}
-        orderLocked={orderLocked}
-        setOrderLocked={setOrderLocked}
-        isOrderSubmitting={isOrderSubmitting}
-        handleOrderSubmit={handleOrderSubmit}
-        showToast={showToast}
-        onBack={() => setVaultSubView("overview")}
-      />
+      <div className="flex flex-col h-full overflow-y-auto px-4 pt-4 pb-32 hide-scrollbar items-center justify-center">
+        <p className="text-[14px] font-bold text-zinc-400">任务视图加载中...</p>
+      </div>
     );
   }
 

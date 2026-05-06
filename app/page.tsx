@@ -17,9 +17,6 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<"assistant" | "vault">(
     "assistant",
   );
-  const [activeSchoolTab, setActiveSchoolTab] = useState<"orgs" | "feed">(
-    "orgs",
-  );
   const [currentOrgName, setCurrentOrgName] = useState<string>("我的班级");
   const [currentOrgRole, setCurrentOrgRole] = useState<"admin" | "member">(
     "admin",
@@ -56,8 +53,6 @@ export default function App() {
   const [chatInput, setChatInput] = useState("");
   const [pinnedIds, setPinnedIds] = useState<string[]>(["sign", "notice"]);
   const [showMorePanel, setShowMorePanel] = useState(false);
-  const [isGlobalAiExpanded, setIsGlobalAiExpanded] = useState(false);
-
   const [messages, setMessages] = useState<
     {
       id: string;
@@ -198,25 +193,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex items-center justify-center p-4 antialiased sm:p-8 font-sans selection:bg-blue-100 selection:text-blue-900">
-      <div className="w-[390px] h-[844px] bg-[#f6f7f9] rounded-[3.5rem] shadow-2xl relative overflow-hidden flex flex-col border-[12px] border-[#101010] shrink-0">
-        {/* Fake Phone Notch */}
-        <div className="absolute top-0 inset-x-0 h-7 flex justify-center z-50 pointer-events-none">
-          <div className="w-[124px] h-7 bg-[#101010] rounded-b-3xl"></div>
+    <div className="min-h-screen antialiased font-sans selection:bg-blue-100 selection:text-blue-900">
+      <div className="w-full min-h-screen bg-[#f6f7f9] relative flex flex-col">
+        {/* --- STATE 1: HOME VIEW (always mounted, hidden via CSS to preserve scroll) --- */}
+        <div className={view === "home" ? "" : "hidden"}>
+          <HomeView />
         </div>
-
-        {/* --- STATE 1: HOME VIEW --- */}
-        {view === "home" && (
-          <HomeView
-            activeSchoolTab={activeSchoolTab}
-            setActiveSchoolTab={setActiveSchoolTab}
-            isGlobalAiExpanded={isGlobalAiExpanded}
-            setIsGlobalAiExpanded={setIsGlobalAiExpanded}
-            setCurrentOrgName={setCurrentOrgName}
-            setCurrentOrgRole={setCurrentOrgRole}
-            setView={setView}
-          />
-        )}
 
         {/* --- STATE 2: CLASS SPACE VIEW --- */}
         {view === "class" && (

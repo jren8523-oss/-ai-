@@ -258,7 +258,7 @@ export default function ChatTimeline({
       <div className="text-center mt-2 mb-4">
         <span className="text-zinc-400 font-medium text-[12px] flex items-center justify-center gap-1.5 mb-1">
           <Bot size={14} />
-          {orgContextMap[currentOrgName]?.aiTitle || "AI 助手"}
+          {orgContextMap[currentOrgName]?.aiTitle || "助手"}
         </span>
       </div>
 
@@ -383,7 +383,7 @@ export default function ChatTimeline({
             <CheckinConfigCard onSendMessage={onSendMessage} />
           )}
 
-          {/* Render AI-driven UI Card (NEW - from ui-request protocol) */}
+          {/* Render UI Card (from ui-request protocol) */}
           {msg.type === "ui-card" && msg.uiRequest && (
             msg.uiRequest.component === "TaskConfigCard" ? (
               <CheckinConfigCard uiRequest={msg.uiRequest} onSendMessage={onSendMessage} />

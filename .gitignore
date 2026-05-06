@@ -1,8 +1,17 @@
+# 依赖
 node_modules/
+
+# Next.js 编译产物
+.next/
+
+# 构建输出
+out/
 build/
-dist/
-coverage/
+
+# 杂项
 .DS_Store
 *.log
 .env*
 !.env.example
+coverage/
+dist/

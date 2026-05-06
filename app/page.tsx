@@ -335,10 +335,6 @@ export default function App() {
                     simulatedUserId={simulatedUserId}
                     messagesEndRef={messagesEndRef}
                     orgContextMap={orgContextMap}
-                    onSendMessage={(text) => {
-                      setChatInput(text);
-                      setTimeout(() => handleSend(), 0);
-                    }}
                     onTasksRefreshed={handleTasksRefreshed}
                     onTriggerCard={handleTriggerCard}
                     onCardConfirm={handleCardConfirm}

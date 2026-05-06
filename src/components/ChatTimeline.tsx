@@ -33,7 +33,6 @@ interface ChatTimelineProps {
   simulatedUserId: string;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
   orgContextMap: Record<string, { aiTitle: string }>;
-  onSendMessage?: (text: string) => void;
   onTasksRefreshed?: () => void;
   onTriggerCard?: (cardType: string) => void;
   onCardConfirm?: (cardType: string) => void;
@@ -248,7 +247,6 @@ export default function ChatTimeline({
   simulatedUserId,
   messagesEndRef,
   orgContextMap,
-  onSendMessage,
   onTasksRefreshed,
   onTriggerCard,
   onCardConfirm,
@@ -384,11 +382,7 @@ export default function ChatTimeline({
                   onClick={() => {
                     if (cardActionsUsed[msg.id]) return;
                     setCardActionsUsed((prev) => ({ ...prev, [msg.id]: true }));
-                    if (currentOrgRole === "member") {
-                      onSendMessage?.("我选择：留校");
-                    } else {
-                      onSendMessage?.("查看签到大屏看板");
-                    }
+                    // onSendMessage 已斩断 — 签到按钮不再强塞文本
                   }}
                   disabled={cardActionsUsed[msg.id]}
                   className={`w-full font-bold py-3 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 ${
@@ -415,14 +409,14 @@ export default function ChatTimeline({
 
           {/* Render Checkin-Config (NEW - legacy from replyLogic) */}
           {msg.type === "checkin-config" && (
-            <CheckinConfigCard onSendMessage={onSendMessage} />
+            <CheckinConfigCard />
           )}
 
           {/* Render UI Card (from ui-request protocol) */}
           {msg.type === "ui-card" && msg.uiRequest && (
             msg.uiRequest.component === "TaskConfigCard" ? (
               msg.uiRequest.props?.type === "checkin" ? (
-                <CheckinConfigCard uiRequest={msg.uiRequest} onSendMessage={onSendMessage} />
+                <CheckinConfigCard uiRequest={msg.uiRequest} />
               ) : (
                 <div className="bg-white rounded-[20px] rounded-tl-sm shadow-[0_2px_12px_rgba(0,0,0,0.02)] px-4 py-3.5 text-[15px] leading-relaxed text-zinc-800">
                   {msg.content || "该任务类型暂不支持卡片配置，请查看文字回复。"}

@@ -308,15 +308,21 @@ export default function ChatTimeline({
             </div>
           )}
 
-          {/* Render Card from front-end interception (isCard flag) */}
-          {msg.isCard && (
-            <>
-              {msg.cardType === 'SignInCard' && <SignInCard messageId={msg.id} />}
-              {msg.cardType === 'ScheduleCard' && <ScheduleCard messageId={msg.id} />}
-              {msg.cardType === 'BooksCard' && <BooksCard messageId={msg.id} />}
-              {msg.cardType === 'NoticeCard' && <NoticeCard messageId={msg.id} />}
-            </>
-          )}
+          {/* Render Card from front-end interception (isCard flag) — strict switch-case routing */}
+          {msg.isCard && (() => {
+            switch (msg.cardType) {
+              case 'SignInCard':
+                return <SignInCard messageId={msg.id} />;
+              case 'ScheduleCard':
+                return <ScheduleCard messageId={msg.id} />;
+              case 'BooksCard':
+                return <BooksCard messageId={msg.id} />;
+              case 'NoticeCard':
+                return <NoticeCard messageId={msg.id} />;
+              default:
+                return null;
+            }
+          })()}
 
           {/* Render Books */}
           {msg.type === "books" && (

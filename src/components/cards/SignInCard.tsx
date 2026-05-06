@@ -6,9 +6,10 @@ interface SignInCardProps {
   messageId: string;
   deadline?: string;
   location?: string;
+  range?: string;
 }
 
-export default function SignInCard({ messageId, deadline = "今晚 21:00", location = "3教101" }: SignInCardProps) {
+export default function SignInCard({ messageId, deadline = "今晚 21:00", location = "3教101", range = "500米内" }: SignInCardProps) {
   const [checkedIn, setCheckedIn] = useState(false);
 
   return (
@@ -26,6 +27,10 @@ export default function SignInCard({ messageId, deadline = "今晚 21:00", locat
         <div className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
           <span className="text-xs text-gray-500">地点</span>
           <span className="text-xs font-semibold text-zinc-800">{location}</span>
+        </div>
+        <div className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+          <span className="text-xs text-gray-500">有效范围</span>
+          <span className="text-xs font-semibold text-zinc-800">{range}</span>
         </div>
       </div>
 

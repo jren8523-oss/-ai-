@@ -93,31 +93,20 @@ export default function App() {
   }, [view, currentOrgName, currentOrgRole]);
 
   const detectPresetCard = (text: string): { type: string; content: string; payload?: any } | null => {
-    const t = text.toLowerCase();
-    if (t.includes("签到")) return { type: "sign-in-card", content: "签到任务" };
-    if (t.includes("统计")) return { type: "schedule-card", content: "统计晚自习" };
-    if (t.includes("教材")) {
-      // Extract book names and prices from text: 《书名》价格
-      const bookRegex = /《([^》]+)》\s*(\d+)\s*元?/g;
-      const books: { name: string; price: number }[] = [];
-      let match;
-      while ((match = bookRegex.exec(text)) !== null) {
-        books.push({ name: match[1], price: parseInt(match[2], 10) });
-      }
+    if (text === "发起签到") return { type: "sign-in-card", content: "签到任务" };
+    if (text === "统计晚自习出勤") return { type: "schedule-card", content: "统计晚自习" };
+    if (text === "征订民法教材") {
       return {
         type: "books-card",
         content: "教材征订",
-        payload: books.length > 0 ? { books } : undefined,
+        payload: { books: [{ name: "民法学", price: 45 }, { name: "刑法学", price: 52 }] },
       };
     }
-    if (t.includes("通知")) {
-      // Extract notice content: try to get text after "通知" or use full text
-      const noticeMatch = text.match(/通知[,，:：]?\s*(.+)/);
-      const noticeContent = noticeMatch ? noticeMatch[1].trim() : text;
+    if (text === "发布放假通知") {
       return {
         type: "notice-card",
         content: "发布通知",
-        payload: { title: "班级通知", content: noticeContent },
+        payload: { title: "放假通知", content: "根据学校安排，下周放假安排如下……" },
       };
     }
     return null;
@@ -171,10 +160,10 @@ export default function App() {
     // ── Mandatory front-end interception: block network requests for preset card triggers ──
     const trimText = text;
     let cardType: string | null = null;
-    if (trimText.includes("签到")) cardType = 'SignInCard';
-    else if (trimText.includes("统计") || trimText.includes("晚自习")) cardType = 'ScheduleCard';
-    else if (trimText.includes("教材") || trimText.includes("征订")) cardType = 'BooksCard';
-    else if (trimText.includes("通知") || trimText.includes("放假")) cardType = 'NoticeCard';
+    if (trimText === "发起签到") cardType = 'SignInCard';
+    else if (trimText === "统计晚自习出勤") cardType = 'ScheduleCard';
+    else if (trimText === "征订民法教材") cardType = 'BooksCard';
+    else if (trimText === "发布放假通知") cardType = 'NoticeCard';
 
     if (cardType) {
       // 1. Push user message to screen

@@ -3,8 +3,15 @@ import { orgContextMap } from "@/src/lib/mockData";
 import {
   parseUIRequest,
   stripUIRequestBlocks,
-  buildCompleteSystemPrompt,
+  buildCompleteSystemPrompt as buildLegacySystemPrompt,
 } from "@/src/lib/uiRequestProtocol";
+import {
+  parseTaskAction,
+  stripTaskAction,
+  buildCompleteSystemPrompt as buildTaskSystemPrompt,
+} from "@/src/lib/taskProtocol";
+import { addTask } from "@/src/lib/taskStore";
+import type { TaskActionType, TaskData } from "@/src/lib/taskProtocol";
 
 export const runtime = "edge";
 export const maxDuration = 25;
@@ -13,16 +20,13 @@ const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
 
 export async function POST(req: Request) {
   try {
-    const { message, contextTitle } = await req.json();
+    const { message, contextTitle, role } = await req.json();
 
     // ── Legacy fallback: replyLogic (hardcoded pattern match) ──
-    // This is kept as a safety net for environments without DEEPSEEK_API_KEY.
-    // The primary path is now AI-driven ui-request protocol below.
     const context = orgContextMap[contextTitle];
     const apiKey = process.env.DEEPSEEK_API_KEY;
 
     if (!apiKey) {
-      // No API key — fall back to replyLogic only
       if (context?.replyLogic) {
         const logicResult = context.replyLogic(message);
         if (typeof logicResult === "object" && "type" in logicResult) {
@@ -30,6 +34,7 @@ export async function POST(req: Request) {
             reply: logicResult.content || "",
             type: logicResult.type,
             uiRequest: null,
+            taskAction: null,
           });
         }
       }
@@ -39,7 +44,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // ── Primary path: AI-driven with ui-request protocol ──
+    // ── Primary path: AI-driven ──
+    // For "我的班级" and role=班委, use the new task protocol
+    const isClassLeader = contextTitle === "我的班级" && role === "班委";
+    const systemPrompt = isClassLeader
+      ? buildTaskSystemPrompt()
+      : buildLegacySystemPrompt(contextTitle);
+
     const response = await fetch(DEEPSEEK_API_URL, {
       method: "POST",
       headers: {
@@ -51,7 +62,7 @@ export async function POST(req: Request) {
         messages: [
           {
             role: "system",
-            content: buildCompleteSystemPrompt(contextTitle),
+            content: systemPrompt,
           },
           {
             role: "user",
@@ -74,10 +85,33 @@ export async function POST(req: Request) {
     const data = await response.json();
     const rawReply: string = data.choices?.[0]?.message?.content || "";
 
-    // Parse ui-request block from AI output
-    let uiRequest = parseUIRequest(rawReply);
+    // ── Try task protocol first (new) ──
+    let taskAction = null;
+    let reply = rawReply;
+    let type: string = "text";
+    let uiRequest = null;
 
-    // Backend-level safeguard: block ui-request for homework-related queries
+    if (isClassLeader) {
+      taskAction = parseTaskAction(rawReply);
+      if (taskAction) {
+        // AI returned a task action JSON — store the task server-side
+        const task = addTask(taskAction.type, taskAction.data as TaskData);
+        reply = stripTaskAction(rawReply) || `✅ 已发布「${taskAction.type}」任务卡片，全班同学可查看并参与。`;
+        type = "task-card";
+        // Include task in response so frontend can render card
+        return NextResponse.json({
+          reply,
+          type,
+          taskAction,
+          task: { id: task.id, type: task.type, data: task.data, createdAt: task.createdAt },
+          uiRequest: null,
+        });
+      }
+    }
+
+    // ── Fallback: legacy ui-request protocol ──
+    uiRequest = parseUIRequest(rawReply);
+
     const homeworkKeywords = ["收作业", "交作业", "催作业", "查作业", "功课", "提交作业", "作业提醒"];
     if (uiRequest && homeworkKeywords.some((kw) => message.includes(kw))) {
       console.warn(
@@ -88,13 +122,10 @@ export async function POST(req: Request) {
       uiRequest = null;
     }
 
-    // Strip ui-request block from user-visible reply
-    const reply = stripUIRequestBlocks(rawReply);
+    reply = stripUIRequestBlocks(rawReply);
+    type = uiRequest ? "ui-card" : "text";
 
-    // Determine type for frontend rendering
-    const type = uiRequest ? "ui-card" : "text";
-
-    return NextResponse.json({ reply, type, uiRequest });
+    return NextResponse.json({ reply, type, uiRequest, taskAction: null });
   } catch (error) {
     console.error("AI chat error:", error);
     return NextResponse.json(

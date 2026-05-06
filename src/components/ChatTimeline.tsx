@@ -5,14 +5,18 @@ import {
   Clock, Crosshair, QrCode, CheckCircle, Send,
 } from "lucide-react";
 import type { UIRequestPayload } from "@/src/lib/uiRequestProtocol";
+import type { StoredTask } from "@/src/lib/taskStore";
+import TaskCards, { SummaryPopup } from "@/src/components/TaskCards";
 
 export interface Message {
   id: string;
   role: "user" | "ai";
-  type: "text" | "books" | "checkin" | "checkin-config" | "ui-card";
+  type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card";
   content?: string;
   payload?: any;
   uiRequest?: UIRequestPayload;
+  task?: StoredTask;
+  tasks?: StoredTask[]; // 同学侧拉取的所有待处理任务
 }
 
 interface ChatTimelineProps {
@@ -20,9 +24,11 @@ interface ChatTimelineProps {
   isAiThinking: boolean;
   currentOrgName: string;
   currentOrgRole: "admin" | "member";
+  simulatedUserId: string;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
   orgContextMap: Record<string, { aiTitle: string }>;
   onSendMessage?: (text: string) => void;
+  onTasksRefreshed?: () => void;
 }
 
 /* ───── Role-based suggestions ───── */
@@ -231,11 +237,14 @@ export default function ChatTimeline({
   isAiThinking,
   currentOrgName,
   currentOrgRole,
+  simulatedUserId,
   messagesEndRef,
   orgContextMap,
   onSendMessage,
+  onTasksRefreshed,
 }: ChatTimelineProps) {
   const [cardActionsUsed, setCardActionsUsed] = useState<Record<string, boolean>>({});
+  const [summaryTask, setSummaryTask] = useState<StoredTask | null>(null);
 
   const suggestions =
     currentOrgRole === "admin" ? ADMIN_SUGGESTIONS : STUDENT_SUGGESTIONS;
@@ -399,8 +408,44 @@ export default function ChatTimeline({
               </div>
             )
           )}
+
+          {/* Render Task Card (from new task protocol - AI-generated) */}
+          {msg.type === "task-card" && msg.task && (
+            <TaskCards
+              tasks={[msg.task]}
+              role={currentOrgRole}
+              simulatedUserId={simulatedUserId}
+              onResponded={() => onTasksRefreshed?.()}
+              onViewSummary={(taskId) => {
+                const t = msg.task || messages.flatMap(m => m.tasks || []).find(t => t.id === taskId);
+                if (t) setSummaryTask(t);
+              }}
+            />
+          )}
+
+          {/* Render fetched tasks list (同学侧拉取) */}
+          {msg.tasks && msg.tasks.length > 0 && msg.id.endsWith("-tasks-list") && (
+            <TaskCards
+              tasks={msg.tasks}
+              role={currentOrgRole}
+              simulatedUserId={simulatedUserId}
+              onResponded={() => onTasksRefreshed?.()}
+              onViewSummary={(taskId) => {
+                const t = msg.tasks.find(t => t.id === taskId);
+                if (t) setSummaryTask(t);
+              }}
+            />
+          )}
         </div>
       ))}
+
+      {/* Summary Popup */}
+      {summaryTask && (
+        <SummaryPopup
+          task={summaryTask}
+          onClose={() => setSummaryTask(null)}
+        />
+      )}
 
       {/* AI Thinking Animation */}
       {isAiThinking && (

@@ -11,6 +11,7 @@ import ChatTimeline from "@/src/components/ChatTimeline";
 import PosterShareModal from "@/src/components/PosterShareModal";
 import { QUICK_ACTIONS, orgContextMap, mockTasks } from "@/src/lib/mockData";
 import type { UIRequestPayload } from "@/src/lib/uiRequestProtocol";
+import type { StoredTask } from "@/src/lib/taskStore";
 
 export default function App() {
   const [view, setView] = useState<"home" | "class">("home");
@@ -57,13 +58,16 @@ export default function App() {
     {
       id: string;
       role: "user" | "ai";
-      type: "text" | "books" | "checkin" | "checkin-config" | "ui-card";
+      type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card";
       content?: string;
       uiRequest?: UIRequestPayload;
+      task?: StoredTask;
+      tasks?: StoredTask[];
     }[]
   >([]);
   const [isAiThinking, setIsAiThinking] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const simulatedUserId = currentOrgRole === "admin" ? "班委-模拟" : "同学-模拟";
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -102,38 +106,60 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: text,
+          role: currentOrgRole === "admin" ? "班委" : "同学",
           contextTitle: currentOrgName,
         }),
       });
 
       const data = await response.json();
-      const reply = response.ok ? data.reply : "抱歉，服务器出现了点问题。";
-      const msgType = (response.ok && data.type) ? data.type : "text";
 
-      const newMsg: {
-        id: string;
-        role: "ai";
-        type: "text" | "books" | "checkin" | "checkin-config" | "ui-card";
-        content?: string;
-        uiRequest?: UIRequestPayload;
-      } = {
-        id: (Date.now() + 1).toString(),
-        role: "ai",
-        type: msgType as typeof newMsg.type,
-        content: reply as string,
-        ...(response.ok && data.uiRequest ? { uiRequest: data.uiRequest as UIRequestPayload } : {}),
-      };
+      if (data.action === "create_task" && data.type && data.data) {
+        // AI returned a structured task — persist it
+        const taskRes = await fetch("/api/tasks", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: data.type,
+            data: data.data,
+            createdBy: simulatedUserId,
+          }),
+        });
+        const taskData = await taskRes.json();
+        const task = taskData.task as StoredTask;
 
-      setMessages((prev) => [...prev, newMsg]);
+        setMessages((prev) => [...prev, {
+          id: (Date.now() + 1).toString(),
+          role: "ai",
+          type: "task-card",
+          content: `已创建${data.type}任务`,
+          task,
+        }]);
+      } else {
+        const reply = response.ok ? (data.reply || "已收到。") : "抱歉，服务器出现了点问题。";
+        const msgType = (response.ok && data.type) ? data.type : "text";
+        const newMsg: {
+          id: string;
+          role: "ai";
+          type: "text" | "books" | "checkin" | "checkin-config" | "ui-card";
+          content?: string;
+          uiRequest?: UIRequestPayload;
+        } = {
+          id: (Date.now() + 1).toString(),
+          role: "ai",
+          type: msgType as typeof newMsg.type,
+          content: reply as string,
+          ...(response.ok && data.uiRequest ? { uiRequest: data.uiRequest as UIRequestPayload } : {}),
+        };
+        setMessages((prev) => [...prev, newMsg]);
+      }
     } catch (error) {
       console.error(error);
-      const errorMsg: typeof messages[0] = {
+      setMessages((prev) => [...prev, {
         id: (Date.now() + 1).toString(),
         role: "ai",
         type: "text",
         content: "网络连接失败，请稍后重试。",
-      };
-      setMessages((prev) => [...prev, errorMsg]);
+      }]);
     } finally {
       setIsAiThinking(false);
     }
@@ -161,6 +187,40 @@ export default function App() {
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 2000);
+  };
+
+  // ── Fetch tasks for student role ──
+  const fetchStudentTasks = async () => {
+    if (currentOrgRole !== "member" || view !== "class") return;
+    try {
+      const res = await fetch("/api/tasks");
+      const data = await res.json();
+      if (data.tasks && data.tasks.length > 0) {
+        setMessages((prev) => {
+          const hasTasks = prev.some(m => m.id === "student-tasks-list");
+          if (hasTasks) return prev.map(m => m.id === "student-tasks-list" ? { ...m, tasks: data.tasks } : m);
+          return [...prev, {
+            id: "student-tasks-list",
+            role: "ai",
+            type: "task-card",
+            tasks: data.tasks,
+            content: "以下是你待处理的任务卡片：",
+          }];
+        });
+      }
+    } catch (e) {
+      console.error("获取任务列表失败", e);
+    }
+  };
+
+  // Auto-fetch when role switches to member or view changes
+  useEffect(() => {
+    fetchStudentTasks();
+  }, [currentOrgRole, view]);
+
+  // onTasksRefreshed callback
+  const handleTasksRefreshed = () => {
+    if (currentOrgRole === "member") fetchStudentTasks();
   };
 
   const handleOrderSubmit = () => {
@@ -208,6 +268,7 @@ export default function App() {
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               currentOrgRole={currentOrgRole}
+              setCurrentOrgRole={setCurrentOrgRole}
               onBack={() => setView("home")}
             />
 
@@ -219,12 +280,14 @@ export default function App() {
                     isAiThinking={isAiThinking}
                     currentOrgName={currentOrgName}
                     currentOrgRole={currentOrgRole}
+                    simulatedUserId={simulatedUserId}
                     messagesEndRef={messagesEndRef}
                     orgContextMap={orgContextMap}
                     onSendMessage={(text) => {
                       setChatInput(text);
                       setTimeout(() => handleSend(), 0);
                     }}
+                    onTasksRefreshed={handleTasksRefreshed}
                   />
                   <ChatInputBar
                     currentOrgRole={currentOrgRole}

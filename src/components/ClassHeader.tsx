@@ -7,6 +7,7 @@ interface ClassHeaderProps {
   activeTab: "assistant" | "vault";
   setActiveTab: (tab: "assistant" | "vault") => void;
   currentOrgRole: "admin" | "member";
+  setCurrentOrgRole?: (role: "admin" | "member") => void;
   onBack: () => void;
 }
 
@@ -15,6 +16,7 @@ export default function ClassHeader({
   activeTab,
   setActiveTab,
   currentOrgRole,
+  setCurrentOrgRole,
   onBack,
 }: ClassHeaderProps) {
   return (
@@ -40,6 +42,34 @@ export default function ClassHeader({
           <MoreHorizontal size={24} strokeWidth={2.5} />
         </button>
       </div>
+
+      {/* Role Switcher */}
+      {setCurrentOrgRole && (
+        <div className="flex justify-center px-4 pt-2 pb-1 bg-[#f6f7f9] z-30 shrink-0">
+          <div className="flex bg-zinc-100 rounded-full p-0.5 gap-0.5">
+            <button
+              onClick={() => setCurrentOrgRole("admin")}
+              className={`px-4 py-1.5 rounded-full text-[12px] font-bold transition-all ${
+                currentOrgRole === "admin"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-700"
+              }`}
+            >
+              我是班委
+            </button>
+            <button
+              onClick={() => setCurrentOrgRole("member")}
+              className={`px-4 py-1.5 rounded-full text-[12px] font-bold transition-all ${
+                currentOrgRole === "member"
+                  ? "bg-white text-emerald-600 shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-700"
+              }`}
+            >
+              我是同学
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Tab Toggle (Level Tabs) */}
       <div className="flex px-4 shrink-0 bg-[#f6f7f9] relative z-30 pt-1 border-b border-zinc-200/50">

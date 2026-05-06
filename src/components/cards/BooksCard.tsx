@@ -10,6 +10,7 @@ interface BookItem {
 interface BooksCardProps {
   messageId: string;
   books?: BookItem[];
+  onConfirm?: () => void;
 }
 
 const DEFAULT_BOOKS: BookItem[] = [
@@ -17,7 +18,7 @@ const DEFAULT_BOOKS: BookItem[] = [
   { name: "刑法学", price: 52 },
 ];
 
-export default function BooksCard({ messageId, books = DEFAULT_BOOKS }: BooksCardProps) {
+export default function BooksCard({ messageId, books = DEFAULT_BOOKS, onConfirm }: BooksCardProps) {
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [confirmed, setConfirmed] = useState(false);
 
@@ -112,7 +113,7 @@ export default function BooksCard({ messageId, books = DEFAULT_BOOKS }: BooksCar
       </div>
 
       <button
-        onClick={() => setConfirmed(true)}
+        onClick={() => { setConfirmed(true); onConfirm?.(); }}
         disabled={!hasSelection}
         className={`w-full font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
           hasSelection

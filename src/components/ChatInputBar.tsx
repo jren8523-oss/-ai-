@@ -49,7 +49,6 @@ export default function ChatInputBar({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              alert("拦截成功！硬编码按钮: SignInCard");
               onTriggerCard?.("SignInCard");
             }}
           >
@@ -62,11 +61,10 @@ export default function ChatInputBar({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              alert("拦截成功！硬编码按钮: ScheduleCard");
               onTriggerCard?.("ScheduleCard");
             }}
           >
-            <span className="mr-1">📊</span> 晚自习(测试标记)
+            <span className="mr-1">📊</span> 统计晚自习出勤
           </button>
           {/* 3. 征订民法教材 */}
           <button
@@ -75,7 +73,6 @@ export default function ChatInputBar({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              alert("拦截成功！硬编码按钮: BooksCard");
               onTriggerCard?.("BooksCard");
             }}
           >
@@ -88,7 +85,6 @@ export default function ChatInputBar({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              alert("拦截成功！硬编码按钮: NoticeCard");
               onTriggerCard?.("NoticeCard");
             }}
           >

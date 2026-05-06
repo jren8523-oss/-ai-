@@ -4,11 +4,12 @@ import { BarChart3 } from "lucide-react";
 
 interface ScheduleCardProps {
   messageId: string;
+  onConfirm?: () => void;
 }
 
 const DAYS = ["周一", "周二", "周三", "周四", "周五"];
 
-export default function ScheduleCard({ messageId }: ScheduleCardProps) {
+export default function ScheduleCard({ messageId, onConfirm }: ScheduleCardProps) {
   const [selectedDays, setSelectedDays] = useState<Set<string>>(new Set());
   const [confirmed, setConfirmed] = useState(false);
 
@@ -56,7 +57,7 @@ export default function ScheduleCard({ messageId }: ScheduleCardProps) {
       </div>
 
       <button
-        onClick={() => { if (!confirmed) setConfirmed(true); }}
+        onClick={() => { if (!confirmed) { setConfirmed(true); onConfirm?.(); } }}
         disabled={confirmed || selectedDays.size === 0}
         className={`w-full font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
           confirmed

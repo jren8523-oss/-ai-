@@ -7,9 +7,10 @@ interface SignInCardProps {
   deadline?: string;
   location?: string;
   range?: string;
+  onConfirm?: () => void;
 }
 
-export default function SignInCard({ messageId, deadline = "今晚 21:00", location = "3教101", range = "500米内" }: SignInCardProps) {
+export default function SignInCard({ messageId, deadline = "今晚 21:00", location = "3教101", range = "500米内", onConfirm }: SignInCardProps) {
   const [checkedIn, setCheckedIn] = useState(false);
 
   return (
@@ -35,7 +36,7 @@ export default function SignInCard({ messageId, deadline = "今晚 21:00", locat
       </div>
 
       <button
-        onClick={() => { if (!checkedIn) setCheckedIn(true); }}
+        onClick={() => { if (!checkedIn) { setCheckedIn(true); onConfirm?.(); } }}
         disabled={checkedIn}
         className={`w-full font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
           checkedIn

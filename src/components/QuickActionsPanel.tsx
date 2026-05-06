@@ -91,7 +91,7 @@ export default function QuickActionsPanel({
                 onClick={() => {
                   const text = action.label || "";
                   if (text.includes("签到")) onTriggerCard?.("SignInCard");
-                  else if (text.includes("晚自习") || text.includes("测试标记")) onTriggerCard?.("ScheduleCard");
+                  else if (text.includes("晚自习")) onTriggerCard?.("ScheduleCard");
                   else if (text.includes("教材")) onTriggerCard?.("BooksCard");
                   else if (text.includes("通知")) onTriggerCard?.("NoticeCard");
                   // 绝对不调用 setChatInput / onQuickAction

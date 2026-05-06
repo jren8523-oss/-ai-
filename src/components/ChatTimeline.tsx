@@ -36,6 +36,7 @@ interface ChatTimelineProps {
   onSendMessage?: (text: string) => void;
   onTasksRefreshed?: () => void;
   onTriggerCard?: (cardType: string) => void;
+  onCardConfirm?: (cardType: string) => void;
 }
 
 /* ───── Role-based suggestions ───── */
@@ -250,6 +251,7 @@ export default function ChatTimeline({
   onSendMessage,
   onTasksRefreshed,
   onTriggerCard,
+  onCardConfirm,
 }: ChatTimelineProps) {
   const [cardActionsUsed, setCardActionsUsed] = useState<Record<string, boolean>>({});
   const [summaryTask, setSummaryTask] = useState<StoredTask | null>(null);
@@ -314,13 +316,13 @@ export default function ChatTimeline({
           {msg.isCard && (() => {
             switch (msg.cardType) {
               case 'SignInCard':
-                return <SignInCard messageId={msg.id} />;
+                return <SignInCard messageId={msg.id} onConfirm={() => onCardConfirm?.('SignInCard')} />;
               case 'ScheduleCard':
-                return <ScheduleCard messageId={msg.id} />;
+                return <ScheduleCard messageId={msg.id} onConfirm={() => onCardConfirm?.('ScheduleCard')} />;
               case 'BooksCard':
-                return <BooksCard messageId={msg.id} />;
+                return <BooksCard messageId={msg.id} onConfirm={() => onCardConfirm?.('BooksCard')} />;
               case 'NoticeCard':
-                return <NoticeCard messageId={msg.id} />;
+                return <NoticeCard messageId={msg.id} onConfirm={() => onCardConfirm?.('NoticeCard')} />;
               default:
                 return null;
             }
@@ -435,22 +437,22 @@ export default function ChatTimeline({
 
           {/* Render Sign-in Card (preset) */}
           {msg.type === "sign-in-card" && (
-            <SignInCard messageId={msg.id} />
+            <SignInCard messageId={msg.id} onConfirm={() => onCardConfirm?.('SignInCard')} />
           )}
 
           {/* Render Schedule Card (preset) */}
           {msg.type === "schedule-card" && (
-            <ScheduleCard messageId={msg.id} />
+            <ScheduleCard messageId={msg.id} onConfirm={() => onCardConfirm?.('ScheduleCard')} />
           )}
 
           {/* Render Books Card (preset) */}
           {msg.type === "books-card" && (
-            <BooksCard messageId={msg.id} books={msg.payload?.books} />
+            <BooksCard messageId={msg.id} books={msg.payload?.books} onConfirm={() => onCardConfirm?.('BooksCard')} />
           )}
 
           {/* Render Notice Card (preset) */}
           {msg.type === "notice-card" && (
-            <NoticeCard messageId={msg.id} title={msg.payload?.title} content={msg.payload?.content} />
+            <NoticeCard messageId={msg.id} title={msg.payload?.title} content={msg.payload?.content} onConfirm={() => onCardConfirm?.('NoticeCard')} />
           )}
 
           {/* Render Task Card (from new task protocol - AI-generated) */}

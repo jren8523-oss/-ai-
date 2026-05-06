@@ -115,6 +115,26 @@ export default function App() {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
+  // Card confirmation handler: push a static read-only card into message flow
+  const handleCardConfirm = (cardType: string) => {
+    console.log("[page.tsx] handleCardConfirm 被调用, cardType =", cardType);
+    const uniqueId = "confirmed-" + Date.now() + Math.random().toString(36).substr(2, 9);
+    const cardLabelMap: Record<string, string> = {
+      SignInCard: "已签到",
+      ScheduleCard: "已确认晚自习统计",
+      BooksCard: "已提交教材订单",
+      NoticeCard: "已确认通知",
+    };
+    const label = cardLabelMap[cardType] || cardType;
+    setMessages(prev => [...prev, {
+      id: uniqueId,
+      role: "ai",
+      content: `✅ ${label}`,
+      isCard: false,
+      type: "text" as const,
+    }]);
+  };
+
   // Quick action handler: delegate to card trigger for preset cards, fallback for custom
   const handleQuickAction = (actionId: string) => {
     const CARD_MAP: Record<string, string> = {
@@ -332,6 +352,7 @@ export default function App() {
                     }}
                     onTasksRefreshed={handleTasksRefreshed}
                     onTriggerCard={handleTriggerCard}
+                    onCardConfirm={handleCardConfirm}
                   />
                   <ChatInputBar
                     currentOrgRole={currentOrgRole}

@@ -6,12 +6,14 @@ interface NoticeCardProps {
   messageId: string;
   title?: string;
   content?: string;
+  onConfirm?: () => void;
 }
 
 export default function NoticeCard({
   messageId,
   title = "班级通知",
   content = "下周一体测，请大家做好准备，穿运动服带学生证。",
+  onConfirm,
 }: NoticeCardProps) {
   const [acknowledged, setAcknowledged] = useState(false);
   const [addedToCalendar, setAddedToCalendar] = useState(false);
@@ -72,7 +74,7 @@ export default function NoticeCard({
       <div className="flex gap-2">
         <button
           onClick={() => {
-            if (!acknowledged) setAcknowledged(true);
+            if (!acknowledged) { setAcknowledged(true); onConfirm?.(); }
           }}
           disabled={acknowledged}
           className={`flex-1 font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${

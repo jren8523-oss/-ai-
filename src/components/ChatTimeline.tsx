@@ -14,7 +14,7 @@ import NoticeCard from "@/src/components/cards/NoticeCard";
 
 export interface Message {
   id: string;
-  role: "user" | "ai";
+  role: "user" | "ai" | "assistant";
   type?: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
   content?: string;
   payload?: any;

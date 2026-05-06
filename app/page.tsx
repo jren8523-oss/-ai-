@@ -57,7 +57,7 @@ export default function App() {
   const [messages, setMessages] = useState<
     {
       id: string;
-      role: "user" | "ai";
+      role: "user" | "ai" | "assistant";
       type?: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
       content?: string;
       payload?: any;
@@ -95,19 +95,8 @@ export default function App() {
 
   // Direct card trigger: bypass text, bypass AI, directly inject card message
   const handleTriggerCard = (cardType: string) => {
-    console.log("[page.tsx] handleTriggerCard 被调用, cardType =", cardType);
-    // 1. 生成绝对唯一的 ID（时间戳+随机数），防止卡片越位乱跳
-    const uniqueId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
-    
-    // 2. 直接注入一条由助理发出的卡片消息
-    setMessages(prev => [...prev, {
-      id: uniqueId,
-      role: 'ai',
-      content: '', // 必须为空，不发废话
-      isCard: true,
-      cardType: cardType
-    }]);
-    console.log("[page.tsx] 消息已注入, id =", uniqueId, "当前消息总数:", document.querySelectorAll('[data-card-id]').length);
+    const id = "local-" + Date.now();
+    setMessages(prev => [...prev, { id, role: 'assistant', content: '', isCard: true, cardType }]);
   };
 
   const showToast = (msg: string) => {
@@ -317,6 +306,16 @@ export default function App() {
 
   return (
     <div className="min-h-screen antialiased font-sans selection:bg-blue-100 selection:text-blue-900">
+      <div style={{ padding: '20px', background: '#ffcccc', zIndex: 9999, border: '2px solid red' }}>
+        <h3 style={{ color: 'red', fontWeight: 'bold' }}>【域外管辖区测试】</h3>
+        <button
+          type="button"
+          onClick={() => handleTriggerCard('ScheduleCard')}
+          style={{ background: 'white', padding: '10px', border: '1px solid black', marginTop: '10px' }}
+        >
+          强制测试：晚自习出勤卡片
+        </button>
+      </div>
       <div className="w-full min-h-screen bg-[#f6f7f9] relative flex flex-col">
         {/* --- STATE 1: HOME VIEW (always mounted, hidden via CSS to preserve scroll) --- */}
         <div className={view === "home" ? "" : "hidden"}>

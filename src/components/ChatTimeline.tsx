@@ -519,7 +519,9 @@ export default function ChatTimeline({
             <button
               key={suggestion}
               type="button"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 if (cardType && onTriggerCard) {
                   onTriggerCard(cardType);
                 }

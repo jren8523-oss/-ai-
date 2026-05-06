@@ -47,21 +47,16 @@ export default function ChatInputBar({
             .map((action) => (
               <button
                 key={action.id}
-                onClick={() => {
-                  const CARD_MAP: Record<string, string> = {
-                    sign: "SignInCard",
-                    schedule: "ScheduleCard",
-                    books: "BooksCard",
-                    notice: "NoticeCard",
-                  };
-                  const cardType = CARD_MAP[action.id];
-                  if (cardType && onTriggerCard) {
-                    onTriggerCard(cardType);
-                  } else if (onQuickAction) {
-                    onQuickAction(action.id);
-                  } else {
-                    setChatInput(action.prompt);
-                  }
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  // 基于 label 文本严格匹配，直接触发本地卡片，绝不发送文本
+                  if (action.label.includes("签到")) onTriggerCard?.("SignInCard");
+                  else if (action.label.includes("晚自习") || action.label.includes("统计")) onTriggerCard?.("ScheduleCard");
+                  else if (action.label.includes("教材")) onTriggerCard?.("BooksCard");
+                  else if (action.label.includes("通知")) onTriggerCard?.("NoticeCard");
+                  else if (onQuickAction) onQuickAction(action.id);
+                  else setChatInput(action.prompt);
                 }}
                 className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
               >

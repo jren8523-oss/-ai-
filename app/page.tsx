@@ -94,16 +94,17 @@ export default function App() {
 
   // Direct card trigger: bypass text, bypass AI, directly inject card message
   const handleTriggerCard = (cardType: string) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now().toString(),
-        role: "ai",
-        content: "",
-        isCard: true,
-        cardType,
-      },
-    ]);
+    // 1. 生成绝对唯一的 ID（时间戳+随机数），防止卡片越位乱跳
+    const uniqueId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+    
+    // 2. 直接注入一条由助理发出的卡片消息
+    setMessages(prev => [...prev, {
+      id: uniqueId,
+      role: 'ai',
+      content: '', // 必须为空，不发废话
+      isCard: true,
+      cardType: cardType
+    }]);
   };
 
   const showToast = (msg: string) => {
@@ -327,6 +328,7 @@ export default function App() {
                       setTimeout(() => handleSend(), 0);
                     }}
                     onTasksRefreshed={handleTasksRefreshed}
+                    onTriggerCard={handleTriggerCard}
                   />
                   <ChatInputBar
                     currentOrgRole={currentOrgRole}
@@ -339,6 +341,7 @@ export default function App() {
                     isAiThinking={isAiThinking}
                     handleSend={handleSend}
                     onQuickAction={handleQuickAction}
+                    onTriggerCard={handleTriggerCard}
                   />
                 </div>
               )}

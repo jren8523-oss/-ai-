@@ -57,7 +57,7 @@ function formatDeadline(durationMinutes: number): string {
   });
 }
 
-const CheckinConfigCard: React.FC<{ uiRequest?: UIRequestPayload; onSendMessage?: (text: string) => void }> = ({ uiRequest, onSendMessage }) => {
+export const CheckinConfigCard: React.FC<{ uiRequest?: UIRequestPayload; onSendMessage?: (text: string) => void }> = ({ uiRequest, onSendMessage }) => {
   const props = uiRequest?.props;
   const inferredTitle = props?.type === "checkin" ? (props?.params?.scene as string) || props?.title || "" : props?.title || "";
   const [title, setTitle] = useState(inferredTitle);

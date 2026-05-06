@@ -12,7 +12,6 @@ import {
   Settings,
   Play,
   RefreshCw,
-  Check,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { AILoading } from "./ui/AILoading";
@@ -23,7 +22,8 @@ import {
   type PersonalityId,
 } from "@/src/store/aiAssistantStore";
 import { rewriteSummary, type RewriteResult } from "@/src/lib/semanticRewriter";
-import { useToast } from "@/src/components/Toast";
+import type { UIRequestPayload } from "@/src/lib/uiRequestProtocol";
+import { CheckinConfigCard } from "./ChatTimeline";
 
 // ─────────────────────────────────────────────────────
 // SettingsView — 性格实验室 (Modal)
@@ -229,18 +229,13 @@ function ChatView() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [surveySelection, setSurveySelection] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const {
     personalityId,
     userPreferences,
     growthLevel,
-    completeTask,
-    isTaskCompleted,
   } = useAiAssistant();
-
-  const { showToast } = useToast();
 
   const avatar = getAvatarByLevel(growthLevel);
   const personalityMeta = PERSONALITY_META[personalityId];
@@ -283,12 +278,14 @@ function ChatView() {
       const reply = response.ok
         ? data.reply
         : "抱歉，AI 服务器暂时出现了点问题，请稍后再试。";
+      const uiRequest: UIRequestPayload | null = data.uiRequest ?? null;
 
       setMessages((prev) => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
           type: "bot",
+          uiRequest,
           content: <div className="whitespace-pre-wrap">{reply}</div>,
         },
       ]);
@@ -394,67 +391,24 @@ function ChatView() {
           </motion.div>
         ))}
 
-        {/* ── 意愿统计交互卡片（单选互斥 + 视觉反馈）── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex gap-3 max-w-full"
-        >
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-sm bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-            <span className="text-xs">{avatar.emoji}</span>
-          </div>
-          <div className="px-4 py-3 text-sm leading-relaxed shadow-sm bg-white border border-zinc-200 text-zinc-800 rounded-2xl rounded-tl-sm w-full">
-            <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-xl">
-              <div className="flex items-center gap-2 text-sm font-medium mb-2 text-zinc-800">
-                <FileText size={16} className="text-blue-500" />
-                <span>意愿统计</span>
-              </div>
-              <p className="text-xs text-zinc-500 mb-3">
-                辅导员发起了《中秋留校意愿统计》（请选择一项）
-              </p>
-              <div className="space-y-2">
-                {[
-                  { id: "mid-autumn-stay", label: "留校（参加学校晚会）" },
-                  { id: "mid-autumn-home", label: "回家（已买好车票）" },
-                ].map((opt) => {
-                  const isSelected = surveySelection === opt.id;
-                  return (
-                    <button
-                      key={opt.id}
-                      onClick={() => {
-                        if (surveySelection === opt.id) return;
-                        setSurveySelection(opt.id);
-                        completeTask(opt.id);
-                        showToast(`提交成功，已记录为 ${opt.label}`);
-                      }}
-                      className={`w-full text-left px-3 py-2 text-sm border rounded-lg transition-all duration-200 flex items-center justify-between ${
-                        isSelected
-                          ? "bg-green-50 border-green-500 text-green-800 shadow-sm"
-                          : "bg-white border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 active:bg-zinc-100"
-                      }`}
-                    >
-                      <span>{opt.label}</span>
-                      {isSelected && (
-                        <motion.span
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                        >
-                          <Check size={16} className="text-green-600" />
-                        </motion.span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-              {surveySelection && (
-                <p className="mt-2 text-[11px] text-green-700/70">
-                  ✅ 已提交选择，如需修改请重新点击上方选项
-                </p>
+        {/* ── UI Card: AI-driven interactive cards (from ui-request protocol) ── */}
+        {messages.map((msg) => msg.uiRequest && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            key={`card-${msg.id}`}
+            className="flex gap-3 max-w-full"
+          >
+            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-sm bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+              <span className="text-xs">{avatar.emoji}</span>
+            </div>
+            <div className="px-4 py-3 text-sm leading-relaxed shadow-sm bg-white border border-zinc-200 text-zinc-800 rounded-2xl rounded-tl-sm w-full">
+              {msg.uiRequest.component === "TaskConfigCard" && (
+                <CheckinConfigCard uiRequest={msg.uiRequest} onSendMessage={(text) => setInput(text)} />
               )}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        ))}
 
         {isTyping && (
           <div className="flex gap-3 max-w-full">

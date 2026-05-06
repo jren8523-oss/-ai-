@@ -17,6 +17,7 @@ export const orgContextMap: Record<string, { aiTitle: string; initialMessage: st
     initialMessage: "课程助手最新通知：本周课程复习资料已自动上传至资产仓，请提醒同学们查阅。目前还有3人未提交课程作业定稿。",
     replyLogic: (text: string) => {
       if (text.includes("发布签到") || text.includes("我要签到")) return { type: "checkin-config", content: "" };
+      if (text.includes("收作业") || text.includes("交作业") || text.includes("催作业")) return "收到。目前暂无作业收集的专属卡片功能，你可以通过群公告或通知模块发布作业提醒。需要我帮你起草一份作业通知吗？";
       if (text.includes("整理")) return "正在为您整理班级周报...";
       if (text.includes("催促")) return "已为您标记未交课程作业的 3 名同学。是否需要我通过系统向他们发送一键催办提醒？";
       return "指令明确。已为您记录，我将继续跟进相关行政执行情况。";

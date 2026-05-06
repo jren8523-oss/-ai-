@@ -386,7 +386,13 @@ export default function ChatTimeline({
           {/* Render UI Card (from ui-request protocol) */}
           {msg.type === "ui-card" && msg.uiRequest && (
             msg.uiRequest.component === "TaskConfigCard" ? (
-              <CheckinConfigCard uiRequest={msg.uiRequest} onSendMessage={onSendMessage} />
+              msg.uiRequest.props?.type === "checkin" ? (
+                <CheckinConfigCard uiRequest={msg.uiRequest} onSendMessage={onSendMessage} />
+              ) : (
+                <div className="bg-white rounded-[20px] rounded-tl-sm shadow-[0_2px_12px_rgba(0,0,0,0.02)] px-4 py-3.5 text-[15px] leading-relaxed text-zinc-800">
+                  {msg.content || "该任务类型暂不支持卡片配置，请查看文字回复。"}
+                </div>
+              )
             ) : (
               <div className="bg-white rounded-[20px] rounded-tl-sm shadow-[0_2px_12px_rgba(0,0,0,0.02)] px-4 py-3.5 text-[13px] text-zinc-500">
                 未知卡片类型: {msg.uiRequest.component}

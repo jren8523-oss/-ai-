@@ -75,7 +75,18 @@ export async function POST(req: Request) {
     const rawReply: string = data.choices?.[0]?.message?.content || "";
 
     // Parse ui-request block from AI output
-    const uiRequest = parseUIRequest(rawReply);
+    let uiRequest = parseUIRequest(rawReply);
+
+    // Backend-level safeguard: block ui-request for homework-related queries
+    const homeworkKeywords = ["收作业", "交作业", "催作业", "查作业", "功课", "提交作业", "作业提醒"];
+    if (uiRequest && homeworkKeywords.some((kw) => message.includes(kw))) {
+      console.warn(
+        "[chat-route] 拦截作业场景下的 ui-request 生成:",
+        uiRequest.props?.type,
+        "→ 降级为纯文本",
+      );
+      uiRequest = null;
+    }
 
     // Strip ui-request block from user-visible reply
     const reply = stripUIRequestBlocks(rawReply);

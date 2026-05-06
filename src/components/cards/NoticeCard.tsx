@@ -75,7 +75,7 @@ export default function NoticeCard({
             if (!acknowledged) setAcknowledged(true);
           }}
           disabled={acknowledged}
-          className={`flex-1 font-bold py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
             acknowledged
               ? "bg-green-50 text-green-600 border border-green-200 cursor-not-allowed"
               : "bg-blue-500 text-white active:bg-blue-600"
@@ -86,7 +86,7 @@ export default function NoticeCard({
         <button
           onClick={handleAddToCalendar}
           disabled={addedToCalendar}
-          className={`flex-1 font-bold py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
             addedToCalendar
               ? "bg-green-50 text-green-600 border border-green-200 cursor-not-allowed"
               : "bg-gray-100 text-gray-700 active:bg-gray-200"

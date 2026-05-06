@@ -32,7 +32,7 @@ export default function SignInCard({ messageId, deadline = "今晚 21:00", locat
       <button
         onClick={() => { if (!checkedIn) setCheckedIn(true); }}
         disabled={checkedIn}
-        className={`w-full font-bold py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
+        className={`w-full font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
           checkedIn
             ? "bg-green-50 text-green-600 border border-green-200 cursor-not-allowed"
             : "bg-blue-500 text-white active:bg-blue-600"

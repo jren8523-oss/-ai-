@@ -36,8 +36,8 @@ interface ChatTimelineProps {
 }
 
 /* ───── Role-based suggestions ───── */
-const ADMIN_SUGGESTIONS = ["发布签到任务", "核对教材缴费情况", "导出考勤异常名单", "整理教务通知摘要"];
-const STUDENT_SUGGESTIONS = ["帮我找下课件", "本周作业截止时间？", "帮我润色口播稿", "查询志愿学分"];
+const ADMIN_SUGGESTIONS = ["发起签到", "统计晚自习出勤", "征订民法教材", "发布放假通知"];
+const STUDENT_SUGGESTIONS = ["发起签到", "统计晚自习出勤", "征订民法教材", "发布放假通知"];
 
 /* ───── CheckinConfigCard (interactive wizard) ───── */
 const SCENE_TEMPLATES = [

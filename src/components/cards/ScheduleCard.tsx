@@ -39,7 +39,7 @@ export default function ScheduleCard({ messageId }: ScheduleCardProps) {
               key={day}
               onClick={() => toggleDay(day)}
               disabled={confirmed}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+              className={`min-w-[44px] min-h-[44px] px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
                 confirmed
                   ? active
                     ? "bg-blue-100 text-blue-700 border-blue-200"
@@ -58,7 +58,7 @@ export default function ScheduleCard({ messageId }: ScheduleCardProps) {
       <button
         onClick={() => { if (!confirmed) setConfirmed(true); }}
         disabled={confirmed || selectedDays.size === 0}
-        className={`w-full font-bold py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
+        className={`w-full font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
           confirmed
             ? "bg-green-50 text-green-600 border border-green-200 cursor-not-allowed"
             : selectedDays.size === 0

@@ -60,6 +60,7 @@ export default function App() {
       role: "user" | "ai";
       type: "text" | "books" | "checkin" | "checkin-config" | "ui-card" | "task-card" | "sign-in-card" | "schedule-card" | "books-card" | "notice-card";
       content?: string;
+      payload?: any;
       uiRequest?: UIRequestPayload;
       task?: StoredTask;
       tasks?: StoredTask[];

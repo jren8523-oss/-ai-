@@ -85,7 +85,7 @@ export default function BooksCard({ messageId, books = DEFAULT_BOOKS }: BooksCar
                 <button
                   onClick={() => adjustQty(book.name, -1)}
                   disabled={qty === 0}
-                  className="w-7 h-7 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="min-w-[44px] min-h-[44px] rounded-full bg-gray-200 text-gray-600 flex items-center justify-center active:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   aria-label={`减少${book.name}`}
                 >
                   <Minus size={14} />
@@ -95,7 +95,7 @@ export default function BooksCard({ messageId, books = DEFAULT_BOOKS }: BooksCar
                 </span>
                 <button
                   onClick={() => adjustQty(book.name, 1)}
-                  className="w-7 h-7 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center active:bg-gray-300 transition-all"
+                  className="min-w-[44px] min-h-[44px] rounded-full bg-gray-200 text-gray-600 flex items-center justify-center active:bg-gray-300 transition-all"
                   aria-label={`增加${book.name}`}
                 >
                   <Plus size={14} />
@@ -114,7 +114,7 @@ export default function BooksCard({ messageId, books = DEFAULT_BOOKS }: BooksCar
       <button
         onClick={() => setConfirmed(true)}
         disabled={!hasSelection}
-        className={`w-full font-bold py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
+        className={`w-full font-bold min-h-[44px] py-2.5 rounded-full flex items-center justify-center gap-2 transition-all ${
           hasSelection
             ? "bg-blue-500 text-white active:bg-blue-600"
             : "bg-gray-200 text-gray-400 cursor-not-allowed"

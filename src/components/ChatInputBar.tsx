@@ -50,13 +50,17 @@ export default function ChatInputBar({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  // 基于 label 文本严格匹配，直接触发本地卡片，绝不发送文本
-                  if (action.label.includes("签到")) onTriggerCard?.("SignInCard");
-                  else if (action.label.includes("晚自习") || action.label.includes("统计")) onTriggerCard?.("ScheduleCard");
-                  else if (action.label.includes("教材")) onTriggerCard?.("BooksCard");
-                  else if (action.label.includes("通知")) onTriggerCard?.("NoticeCard");
-                  else if (onQuickAction) onQuickAction(action.id);
-                  else setChatInput(action.prompt);
+                  console.log("[ChatInputBar] 按钮点击, action.id =", action.id, "label =", action.label);
+                  // 基于 action.id 精确匹配，直接触发本地卡片，绝不发送文本
+                  if (action.id === "sign") onTriggerCard?.("SignInCard");
+                  else if (action.id === "schedule") onTriggerCard?.("ScheduleCard");
+                  else if (action.id === "books") onTriggerCard?.("BooksCard");
+                  else if (action.id === "notice") onTriggerCard?.("NoticeCard");
+                  else if (onQuickAction) {
+                    console.log("[ChatInputBar] 非预设 action, 走 onQuickAction:", action.id);
+                    onQuickAction(action.id);
+                  }
+                  // 绝不调用 setChatInput，防止触发 handleSend 网络请求
                 }}
                 className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 whitespace-nowrap active:bg-gray-50 flex items-center justify-center shrink-0"
               >

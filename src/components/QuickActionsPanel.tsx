@@ -25,6 +25,7 @@ interface QuickActionsPanelProps {
   newActionPrompt: string;
   setNewActionPrompt: (v: string) => void;
   onQuickAction?: (actionId: string) => void;
+  onTriggerCard?: (cardType: string) => void;
 }
 
 export default function QuickActionsPanel({
@@ -42,6 +43,7 @@ export default function QuickActionsPanel({
   newActionPrompt,
   setNewActionPrompt,
   onQuickAction,
+  onTriggerCard,
 }: QuickActionsPanelProps) {
   if (!showMorePanel) return null;
 
@@ -85,7 +87,12 @@ export default function QuickActionsPanel({
               <div
                 className="flex items-center gap-3 flex-1 cursor-pointer"
                 onClick={() => {
-                  if (onQuickAction) {
+                  // 预设 action.id 直接走卡片路线，绕过 setChatInput
+                  if (action.id === "sign") onTriggerCard?.("SignInCard");
+                  else if (action.id === "schedule") onTriggerCard?.("ScheduleCard");
+                  else if (action.id === "books") onTriggerCard?.("BooksCard");
+                  else if (action.id === "notice") onTriggerCard?.("NoticeCard");
+                  else if (onQuickAction) {
                     onQuickAction(action.id);
                   } else {
                     setChatInput(action.prompt);

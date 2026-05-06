@@ -94,6 +94,7 @@ export default function App() {
 
   // Direct card trigger: bypass text, bypass AI, directly inject card message
   const handleTriggerCard = (cardType: string) => {
+    console.log("[page.tsx] handleTriggerCard 被调用, cardType =", cardType);
     // 1. 生成绝对唯一的 ID（时间戳+随机数），防止卡片越位乱跳
     const uniqueId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
     
@@ -105,6 +106,7 @@ export default function App() {
       isCard: true,
       cardType: cardType
     }]);
+    console.log("[page.tsx] 消息已注入, id =", uniqueId, "当前消息总数:", document.querySelectorAll('[data-card-id]').length);
   };
 
   const showToast = (msg: string) => {
@@ -416,6 +418,7 @@ export default function App() {
           newActionPrompt={newActionPrompt}
           setNewActionPrompt={setNewActionPrompt}
           onQuickAction={handleQuickAction}
+          onTriggerCard={handleTriggerCard}
         />
 
         <PosterShareModal
